@@ -227,44 +227,66 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">LV</span>
-                </div>
-                <span className="text-2xl font-bold">Lago Vibes</span>
-              </div>
-              <p className="text-gray-400">
-                As melhores casas para suas férias em Brasília
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Links Rápidos</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="/casas" className="hover:text-white transition-colors">Casas</Link></li>
-                <li><Link href="/disponibilidade" className="hover:text-white transition-colors">Disponibilidade</Link></li>
-                <li><Link href="/contato" className="hover:text-white transition-colors">Contato</Link></li>
-                <li><Link href="/login" className="hover:text-white transition-colors">Login</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Contato</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>WhatsApp: (61) 99999-9999</li>
-                <li>Instagram: @lagovibes</li>
-                <li>Email: contato@lagovibes.com</li>
-              </ul>
-            </div>
+     {/* Footer */}
+<footer className="bg-gray-900 text-white py-12">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      {/* LOGO + FRASE */}
+      <div>
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-xl">LV</span>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-            <p>&copy; 2024 Lago Vibes. Todos os direitos reservados.</p>
-          </div>
+          <span className="text-2xl font-bold">Lago Vibes</span>
         </div>
-      </footer>
+
+        <p className="text-gray-400 leading-6">
+          As melhores casas de luxo no Lago de Furnas - MG
+        </p>
+      </div>
+
+      {/* LINKS RÁPIDOS */}
+      <div>
+        <h3 className="font-semibold mb-4">📌 Links Úteis</h3>
+        <ul className="space-y-2 text-gray-300">
+          <li>🏠 <Link href="/casas" className="hover:text-white">Todas as Casas</Link></li>
+          <li>📆 <Link href="/disponibilidade" className="hover:text-white">Consultar Disponibilidade</Link></li>
+          <li>📱 <Link href="/contato" className="hover:text-white">Contatos</Link></li>
+          <li>🔐 <Link href="/login" className="hover:text-white">Área do Admin</Link></li>
+        </ul>
+      </div>
+
+      {/* CONTATOS */}
+      <div>
+        <h3 className="font-semibold mb-4">📞 Contato</h3>
+        <ul className="space-y-2 text-gray-300">
+
+          <li>
+            📲 <a href="https://wa.me/message/2K2OFJXQOYH7K1"
+                target="_blank"
+                className="hover:text-green-400 transition">
+                WhatsApp — (31) 97334-6945
+                </a>
+          </li>
+
+          <li>
+            📸 <a href="https://www.instagram.com/lago_vibes?igsh=dXV1aXd0YnZkbnIy&utm_source=qr"
+                target="_blank"
+                className="hover:text-pink-400 transition">
+                Instagram — @lago_vibes
+                </a>
+          </li>
+
+          <li>✉ contato: LagoVibes@hotmail.com</li>
+        </ul>
+      </div>
+
     </div>
-  );
-}
+
+    {/* DIREITOS */}
+    <div className="mt-10 pt-6 border-t border-gray-800 text-center text-gray-400 text-sm">
+      <p>© 2024 Lago Vibes. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>
