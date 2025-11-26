@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
@@ -27,8 +27,14 @@ interface ExtraService {
   providerTotalValue: number;
   providerPaidValue: number;
 }
-
-export default function NovaReservaPage() {
+export default function NovaReservaPageWrapper() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <NovaReservaInner />
+    </Suspense>
+  );
+}
+  function NovaReservaInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
