@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-// import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Plus, Trash2 } from 'lucide-react';
 import { applyPhoneMask } from '@/lib/phone-mask';
@@ -31,7 +30,7 @@ interface ExtraService {
 
 export default function NovaReservaPage() {
   const router = useRouter();
- // const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [formData, setFormData] = useState({
     propertyId: '',

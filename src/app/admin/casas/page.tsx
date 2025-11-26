@@ -31,9 +31,8 @@ interface Owner {
 }
 
 export default function CasasPage() {
-  // const searchParams = useSearchParams();
-// const filterParam = searchParams.get('filter');
-const filterParam = null;
+  const searchParams = useSearchParams();
+  const filterParam = searchParams.get('filter');
   
   const [searchTerm, setSearchTerm] = useState('');
   const [properties, setProperties] = useState<Property[]>([]);
