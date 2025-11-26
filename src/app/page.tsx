@@ -227,12 +227,12 @@ export default function HomePage() {
         </div>
       </section>
 
-     {/* Footer */}
-<footer className="bg-gray-900 text-white py-12">
+   {/* Footer */}
+<footer className="bg-gray-900 text-white py-12 mt-16">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-      {/* LOGO + FRASE */}
+      {/* LOGO + TEXTO */}
       <div>
         <div className="flex items-center gap-2 mb-4">
           <div className="w-10 h-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center">
@@ -240,13 +240,12 @@ export default function HomePage() {
           </div>
           <span className="text-2xl font-bold">Lago Vibes</span>
         </div>
-
         <p className="text-gray-400 leading-6">
           As melhores casas de luxo no Lago de Furnas - MG
         </p>
       </div>
 
-      {/* LINKS RÁPIDOS */}
+      {/* LINKS ÚTEIS */}
       <div>
         <h3 className="font-semibold mb-4">📌 Links Úteis</h3>
         <ul className="space-y-2 text-gray-300">
@@ -263,25 +262,20 @@ export default function HomePage() {
         <ul className="space-y-2 text-gray-300">
 
           <li>
-            📲 <a href="https://wa.me/message/2K2OFJXQOYH7K1"
-                target="_blank"
-                className="hover:text-green-400 transition">
-                WhatsApp — (31) 97334-6945
-                </a>
+            <a href="https://wa.me/message/2K2OFJXQOYH7K1" target="_blank" className="hover:text-green-300">
+              WhatsApp — (31) 97334-6945
+            </a>
           </li>
 
           <li>
-            📸 <a href="https://www.instagram.com/lago_vibes?igsh=dXV1aXd0YnZkbnIy&utm_source=qr"
-                target="_blank"
-                className="hover:text-pink-400 transition">
-                Instagram — @lago_vibes
-                </a>
+            <a href="https://www.instagram.com/lago_vibes?igsh=dXV1aXd0YnZkbnIy&utm_source=qr" target="_blank" className="hover:text-pink-400">
+              Instagram — @lago_vibes
+            </a>
           </li>
 
-          <li>✉ contato: LagoVibes@hotmail.com</li>
+          <li>Email: LagoVibes@hotmail.com</li>
         </ul>
       </div>
-
     </div>
 
     {/* DIREITOS */}
