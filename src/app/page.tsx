@@ -245,19 +245,40 @@ export default function HomePage() {
             <div>
               <h3 className="font-semibold mb-4">Links Rápidos</h3>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/casas" className="hover:text-white transition-colors">Casas</Link></li>
-                <li><Link href="/disponibilidade" className="hover:text-white transition-colors">Disponibilidade</Link></li>
-                <li><Link href="/contato" className="hover:text-white transition-colors">Contato</Link></li>
-                <li><Link href="/login" className="hover:text-white transition-colors">Login</Link></li>
+              <li><Link href="/casas" className="hover:text-white transition-colors">Todas as Casas</Link></li>
+              <li><Link href="/disponibilidade" className="hover:text-white transition-colors">Consultar Disponibilidade</Link></li>
+              <li><Link href="/contato" className="hover:text-white transition-colors">Contatos</Link></li>
+              <li><Link href="/login" className="hover:text-white transition-colors">Área do Admin</Link></li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-4">Contato</h3>
               <ul className="space-y-2 text-gray-400">
-                <li>WhatsApp: (61) 99999-9999</li>
-                <li>Instagram: @lagovibes</li>
-                <li>Email: contato@lagovibes.com</li>
-              </ul>
+                <ul className="space-y-2 text-gray-400">
+  <li>
+    <a
+      href="https://wa.me/message/2K2OFJXQOYH7K1"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:text-green-300 transition"
+    >
+      WhatsApp — (31) 97334-6945
+    </a>
+  </li>
+
+  <li>
+    <a
+      href="https://www.instagram.com/lago_vibes?igsh=dXV1aXd0YnZkbnIy&utm_source=qr"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hover:text-pink-400 transition"
+    >
+      Instagram — @lago_vibes
+    </a>
+  </li>
+
+  <li>Email: LagoVibes@hotmail.com</li>
+</ul>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
