@@ -228,64 +228,42 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">LV</span>
-                </div>
-                <span className="text-2xl font-bold">Lago Vibes</span>
-              </div>
-              <p className="text-gray-400">
-                As melhores casas para suas férias em Brasília
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Links Rápidos</h3>
-              <ul className="space-y-2 text-gray-400">
-              <li><Link href="/casas" className="hover:text-white transition-colors">Todas as Casas</Link></li>
-              <li><Link href="/disponibilidade" className="hover:text-white transition-colors">Consultar Disponibilidade</Link></li>
-              <li><Link href="/contato" className="hover:text-white transition-colors">Contatos</Link></li>
-              <li><Link href="/login" className="hover:text-white transition-colors">Área do Admin</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-4">Contato</h3>
-              <ul className="space-y-2 text-gray-400">
-                <ul className="space-y-2 text-gray-400">
-  <li>
-    <a
-      href="https://wa.me/message/2K2OFJXQOYH7K1"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="hover:text-green-300 transition"
-    >
-      WhatsApp — (31) 97334-6945
-    </a>
-  </li>
+      <footer className="bg-gray-900 text-white py-10 mt-20 border-t border-gray-800">
+  <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
 
-  <li>
-    <a
-      href="https://www.instagram.com/lago_vibes?igsh=dXV1aXd0YnZkbnIy&utm_source=qr"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="hover:text-pink-400 transition"
-    >
-      Instagram — @lago_vibes
-    </a>
-  </li>
+    {/* LOGO + FRASE */}
+    <div>
+      <h2 className="text-2xl font-bold tracking-wide">Lago Vibes</h2>
+      <p className="text-gray-400 mt-2">Casas de luxo no Lago de Furnas</p>
+    </div>
 
-  <li>Email: LagoVibes@hotmail.com</li>
-</ul>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-            <p>&copy; 2024 Lago Vibes. Todos os direitos reservados.</p>
-          </div>
-        </div>
-      </footer>
+    {/* LINKS */}
+    <div>
+      <h3 className="font-semibold mb-3">Navegação</h3>
+      <ul className="space-y-1 text-gray-300">
+        <li><a href="/casas" className="hover:text-white transition">Todas as Casas</a></li>
+        <li><a href="/disponibilidade" className="hover:text-white transition">Consultar Disponibilidade</a></li>
+        <li><a href="/contato" className="hover:text-white transition">Contato</a></li>
+        <li><a href="/login" className="hover:text-white transition">Área do Admin</a></li>
+      </ul>
+    </div>
+
+    {/* CONTATO */}
+    <div>
+      <h3 className="font-semibold mb-3">Contato</h3>
+      <ul className="space-y-1 text-gray-300">
+        <li>📞 WhatsApp: (31) 97334-6945</li>
+        <li>📸 Instagram: @lago_vibes</li>
+        <li>📧 Email: lagovibes@hotmail.com</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p className="text-center text-gray-500 text-sm mt-10">
+    © 2024 Lago Vibes — Todos os direitos reservados.
+  </p>
+</footer>
     </div>
   );
 }
