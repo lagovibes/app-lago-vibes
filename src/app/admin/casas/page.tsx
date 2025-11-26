@@ -30,7 +30,15 @@ interface Owner {
   email: string;
 }
 
-export default function CasasPage() {
+export default function CasasPageWrapper() {
+  return (
+    <Suspense fallback={<div>Carregando...</div>}>
+      <CasasPage />
+    </Suspense>
+  );
+}
+
+function CasasPage() {
   const searchParams = useSearchParams();
   const filterParam = searchParams.get('filter');
   
