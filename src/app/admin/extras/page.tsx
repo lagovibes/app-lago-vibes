@@ -232,7 +232,67 @@ export default function ExtrasPage() {
                   ))}
                 </select>
               </div>
+{/* Passeio (Lancha / Jet Ski) */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-2">
+    Tipo de Passeio *
+  </label>
+  <select
+    value={formData.extraType}
+    onChange={(e) => setFormData({ ...formData, extraType: e.target.value })}
+    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+    required
+  >
+    <option value="">Selecione</option>
+    <option value="Lancha">Lancha</option>
+    <option value="Jet Ski">Jet Ski</option>
+  </select>
+</div>
 
+{/* Selecionar Embarcação */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-2">
+    Modelo / Nome da Embarcação *
+  </label>
+  <input
+    type="text"
+    placeholder="Ex: Lancha Phoenix 25 pés / Jet SeaDoo 300hp"
+    value={formData.serviceName || ""}
+    onChange={(e) => setFormData({ ...formData, serviceName: e.target.value })}
+    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+    required
+  />
+</div>
+
+{/* Capacidade */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-2">
+    Capacidade de Pessoas *
+  </label>
+  <input
+    type="number"
+    placeholder="Ex: 10 pessoas"
+    value={formData.capacity || ""}
+    onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+    required
+  />
+</div>
+
+{/* Nome do Proprietário */}
+<div>
+  <label className="block text-sm font-semibold text-gray-700 mb-2">
+    Proprietário da Embarcação *
+  </label>
+  <input
+    type="text"
+    placeholder="Nome do dono"
+    value={formData.providerName || ""}
+    onChange={(e) => setFormData({ ...formData, providerName: e.target.value })}
+    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+    required
+  />
+</div>
               {/* Reserva */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
