@@ -482,17 +482,16 @@ useEffect(() => {
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all font-semibold"
               >
                 Cadastrar Serviço
-              </button>
               <button
-                type="button"
-                onClick={() => setShowForm(false)}
-                className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-semibold"
-              >
-                Cancelar
-              </button>
-            </div>
-          </form>
-        </div>
+  type="button"
+  onClick={() => setShowForm(false)}
+  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition"
+>
+  Cancelar
+</button>
+</div> {/* fecha div do grupo dos botões */}
+</form>
+</div> {/* fecha o bloco inteiro do formulário */}
 
       {/* Search */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
