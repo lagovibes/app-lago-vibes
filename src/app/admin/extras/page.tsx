@@ -283,18 +283,9 @@ useEffect(() => {
         {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
       </option>
     ))}
-
   </select>
 </div>
-    <option value="">Selecione uma embarcação</option>
-    {boats.map((boat) => (
-      <option key={boat.id} value={boat.id}>
-        {boat.name} — Capacidade {boat.capacity} — R$ {boat.price}
-      </option>
-    ))}
-  </select>
-</div>
-
+    
 {/* Capacidade */}
 <div>
   <label className="block text-sm font-semibold text-gray-700 mb-2">
