@@ -12,7 +12,8 @@ import {
   LogOut,
   Menu,
   X,
-  Database
+  Database,
+  Ship
 } from 'lucide-react';
 import { useState } from 'react';
 
