@@ -496,13 +496,13 @@ useEffect(() => {
         Cancelar
     </button>
 
-</div> {/* fecha div dos botões */}
+</div> {/* FIM BOTÕES */}
 
-</form> {/* fecha formulário */}
+</form> {/* FIM FORMULÁRIO */}
 
-</div> {/* fecha bloco inteiro do formulário */}
+</div> {/* FIM BLOCO FORM */}
 
-      {/* Search */}
+{/* Search */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
