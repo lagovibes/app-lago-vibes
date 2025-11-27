@@ -493,8 +493,10 @@ useEffect(() => {
         className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200">
         Cancelar
     </button>
-</div> {/* FIM BOTÕES */}
-</form> {/* FIM FORMULÁRIO */}
+</div> 
+    {/* FIM BOTÕES */}
+</form> 
+  {/* FIM FORMULÁRIO */}
   
 {/* Search */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
