@@ -475,7 +475,6 @@ useEffect(() => {
                   step="0.01"
                 />
               </div>
-            </div>
 
             <div className="flex gap-4">
               <button
