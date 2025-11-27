@@ -261,6 +261,7 @@ useEffect(() => {
   <label className="block text-sm font-semibold text-gray-700 mb-2">
     Escolha a Embarcação *
   </label>
+
   <select
     value={formData.boatId || ""}
     onChange={(e) => {
@@ -276,11 +277,13 @@ useEffect(() => {
     required
   >
     <option value="">Selecionar...</option>
-    {boats.map((b) => (
-      <option key={b.id} value={b.id}>
-        {b.name} • {b.capacity} pessoas • R$ {b.price}
+
+    {boats.map((boat) => (
+      <option key={boat.id} value={boat.id}>
+        {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
       </option>
     ))}
+
   </select>
 </div>
     <option value="">Selecione uma embarcação</option>
