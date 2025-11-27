@@ -199,7 +199,10 @@ export default function NovaReservaPageWrapper() {
     }
 
     alert('Reserva criada com sucesso!');
-    router.push('/admin/reservas');
+
+setTimeout(() => {
+  router.push('/admin/reservas');
+}, 500); // 0.5s para garantir que salvou antes de mudar de página
   };
 
   const addExtra = () => {
@@ -338,16 +341,21 @@ export default function NovaReservaPageWrapper() {
                       </div>
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
-                          <p className="text-gray-600">Valor Total</p>
-                          <p className="font-bold text-gray-900">
-                            {formatCurrency(extra.totalValue)}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-gray-600">Já Pago</p>
-                          <p className="font-bold text-green-600">
-                            {formatCurrency(extra.paidValue)}
-                          </p>
+                         <p className="text-gray-600">Valor Total</p>
+<input
+    type="number"
+    value={extra.totalValue}
+    onChange={(e) => updateExtra(index, "totalValue", Number(e.target.value))}
+    className="border rounded px-2 py-1 w-full text-right font-medium"
+/>
+
+<p className="text-gray-600">Já Pago</p>
+<input
+    type="number"
+    value={extra.paidValue}
+    onChange={(e) => updateExtra(index, "paidValue", Number(e.target.value))}
+    className="border rounded px-2 py-1 w-full text-right font-medium"
+/>
                         </div>
                         <div>
                           <p className="text-gray-600">Falta Pagar</p>
