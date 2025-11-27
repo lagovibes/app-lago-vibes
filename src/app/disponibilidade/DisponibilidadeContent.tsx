@@ -116,7 +116,9 @@ export default function DisponibilidadeContent() {
     const firstDay = new Date(year, month - 1, 1);
     const lastDay = new Date(year, month, 0);
     const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
+    // Ajustar para iniciar a semana na Segunda-feira
+let startingDayOfWeek = firstDay.getDay();
+startingDayOfWeek = startingDayOfWeek === 0 ? 6 : startingDayOfWeek - 1
 
     const days = [];
     
@@ -295,7 +297,11 @@ export default function DisponibilidadeContent() {
                   Disponibilidade
                 </h2>
                 <p className="text-gray-600">
-                  {new Date(selectedMonth + '-01').toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                  {new Date(
+    Number(selectedMonth.split('-')[0]),         // Ano
+    Number(selectedMonth.split('-')[1]) - 1,     // Mês (corrigindo)
+    1
+).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
                 </p>
               </div>
 
@@ -318,7 +324,7 @@ export default function DisponibilidadeContent() {
               {/* Calendar Grid */}
               <div className="grid grid-cols-7 gap-2 mb-6">
                 {/* Week days header */}
-                {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((day) => (
+                {['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb','Dom',].map((day) => (
                   <div key={day} className="text-center font-semibold text-gray-700 py-2">
                     {day}
                   </div>
