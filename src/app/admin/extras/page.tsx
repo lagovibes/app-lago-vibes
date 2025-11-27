@@ -498,7 +498,6 @@ useEffect(() => {
 
 </div> {/* fecha div dos botões */}
 </form> {/* fecha formulário */}
-</div> {/* fecha bloco inteiro */}
 
       {/* Search */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
