@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Search, Calendar, Clock, DollarSign, User, Home, Sparkles } from 'lucide-react';
 import { ExtraService } from '@/lib/types';
 import { mockExtras } from '@/lib/mock-data';
+import { mockBoats } from '@/lib/mock-data'; // Embarcações cadastradas
 import { useRouter } from 'next/navigation';
 
 interface Property {
@@ -28,6 +29,8 @@ export default function ExtrasPage() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
   
+  // EMBARCAÇÕES (Lanchas / Jets)
+const [boats, setBoats] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     propertyId: '',
     reservationId: '',
@@ -40,6 +43,10 @@ export default function ExtrasPage() {
     providerPaidValue: 0,
   });
 
+  // CARREGA EMBARCAÇÕES AUTOMATICAMENTE
+useEffect(() => {
+    setBoats(mockBoats); // vem do cadastro de embarcações
+}, []);
   useEffect(() => {
     loadData();
   }, []);
@@ -249,27 +256,33 @@ export default function ExtrasPage() {
   </select>
 </div>
 
-{/* Selecionar Embarcação (puxa automaticamente do cadastro) */}
+{/* Selecionar Embarcação */}
 <div>
   <label className="block text-sm font-semibold text-gray-700 mb-2">
-    Embarcação *
+    Escolha a Embarcação *
   </label>
   <select
     value={formData.boatId || ""}
     onChange={(e) => {
-
-      const boat = boats.find((b) => b.id === e.target.value);
-
+      const selected = boats.find(b => b.id === e.target.value);
       setFormData({
         ...formData,
         boatId: e.target.value,
-        capacity: boat?.capacity || "",
-        totalValue: boat?.price || 0
+        capacity: selected?.capacity || "",
+        totalValue: selected?.price || 0
       });
     }}
-    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none mb-4"
+    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
     required
   >
+    <option value="">Selecionar...</option>
+    {boats.map((b) => (
+      <option key={b.id} value={b.id}>
+        {b.name} • {b.capacity} pessoas • R$ {b.price}
+      </option>
+    ))}
+  </select>
+</div>
     <option value="">Selecione uma embarcação</option>
     {boats.map((boat) => (
       <option key={boat.id} value={boat.id}>
