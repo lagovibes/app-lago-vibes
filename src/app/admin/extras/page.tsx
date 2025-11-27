@@ -476,7 +476,7 @@ useEffect(() => {
                 />
               </div>
 
-            {/* Botões */}
+           {/* Botões */}
 <div className="flex gap-4">
 
     {/* Botão cadastrar */}
@@ -491,13 +491,16 @@ useEffect(() => {
     <button
         type="button"
         onClick={() => setShowForm(false)}
-        className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-300 transition"
+        className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition"
     >
         Cancelar
     </button>
 
 </div> {/* fecha div dos botões */}
+
 </form> {/* fecha formulário */}
+
+</div> {/* fecha bloco inteiro do formulário */}
 
       {/* Search */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
