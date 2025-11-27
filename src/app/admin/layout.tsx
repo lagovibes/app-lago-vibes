@@ -46,6 +46,7 @@ export default function AdminLayout({
     { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/admin/casas', icon: Home, label: 'Casas' },
     { href: '/admin/reservas', icon: Calendar, label: 'Reservas' },
+    { href: '/admin/passeios', icon: Sparkles, label: 'Passeios' },
     { href: '/admin/proprietarios', icon: Users, label: 'Proprietários' },
     { href: '/admin/calendario', icon: Calendar, label: 'Calendário' },
     { href: '/admin/extras', icon: Sparkles, label: 'Extras' },
