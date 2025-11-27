@@ -476,22 +476,29 @@ useEffect(() => {
                 />
               </div>
 
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all font-semibold"
-              >
-                Cadastrar Serviço
-              <button
-  type="button"
-  onClick={() => setShowForm(false)}
-  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition"
->
-  Cancelar
-</button>
-</div> {/* fecha div do grupo dos botões */}
-</form>
-</div> {/* fecha o bloco inteiro do formulário */}
+            {/* Botões */}
+<div className="flex gap-4">
+
+    {/* Botão cadastrar */}
+    <button
+        type="submit"
+        className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:opacity-90 transition"
+    >
+        Cadastrar Serviço
+    </button>
+
+    {/* Botão cancelar */}
+    <button
+        type="button"
+        onClick={() => setShowForm(false)}
+        className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-300 transition"
+    >
+        Cancelar
+    </button>
+
+</div> {/* fecha div dos botões */}
+</form> {/* fecha formulário */}
+</div> {/* fecha bloco inteiro */}
 
       {/* Search */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
