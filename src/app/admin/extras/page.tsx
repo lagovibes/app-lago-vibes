@@ -497,9 +497,7 @@ useEffect(() => {
     </button>
 
 </div> {/* FIM BOTÕES */}
-
 </form> {/* FIM FORMULÁRIO */}
-
 </div> {/* FIM BLOCO FORM */}
 
 {/* Search */}
