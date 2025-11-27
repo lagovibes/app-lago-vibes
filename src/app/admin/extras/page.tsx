@@ -249,19 +249,34 @@ export default function ExtrasPage() {
   </select>
 </div>
 
-{/* Selecionar Embarcação */}
+{/* Selecionar Embarcação (puxa automaticamente do cadastro) */}
 <div>
   <label className="block text-sm font-semibold text-gray-700 mb-2">
-    Modelo / Nome da Embarcação *
+    Embarcação *
   </label>
-  <input
-    type="text"
-    placeholder="Ex: Lancha Phoenix 25 pés / Jet SeaDoo 300hp"
-    value={formData.serviceName || ""}
-    onChange={(e) => setFormData({ ...formData, serviceName: e.target.value })}
-    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+  <select
+    value={formData.boatId || ""}
+    onChange={(e) => {
+
+      const boat = boats.find((b) => b.id === e.target.value);
+
+      setFormData({
+        ...formData,
+        boatId: e.target.value,
+        capacity: boat?.capacity || "",
+        totalValue: boat?.price || 0
+      });
+    }}
+    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none mb-4"
     required
-  />
+  >
+    <option value="">Selecione uma embarcação</option>
+    {boats.map((boat) => (
+      <option key={boat.id} value={boat.id}>
+        {boat.name} — Capacidade {boat.capacity} — R$ {boat.price}
+      </option>
+    ))}
+  </select>
 </div>
 
 {/* Capacidade */}
