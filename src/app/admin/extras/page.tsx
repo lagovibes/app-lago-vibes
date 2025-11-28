@@ -1,9 +1,18 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Plus, Search, Calendar, Clock, DollarSign, User, Home, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Plus,
+  Search,
+  Calendar,
+  Clock,
+  DollarSign,
+  User,
+  Home,
+  Sparkles,
+} from 'lucide-react';
 import { ExtraService } from '@/lib/types';
-import { mockExtras, mockBoats } from '@/lib/mock-data'; // Embarcações cadastradas
+import { mockExtras, mockBoats } from '@/lib/mock-data';
 import { useRouter } from 'next/navigation';
 
 interface Property {
@@ -20,14 +29,24 @@ interface Reservation {
   checkOut: string;
 }
 
+interface Boat {
+  id: string;
+  name: string;
+  capacity: number;
+  price: number;
+  providerName?: string;
+  providerRate?: number; // percentual de repasse (ex: 60 = 60%)
+}
+
 export default function ExtrasPage() {
   const router = useRouter();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [extraServices, setExtraServices] = useState<ExtraService[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [boats, setBoats] = useState<any[]>([]);
+  const [boats, setBoats] = useState<Boat[]>([]);
 
   const [formData, setFormData] = useState({
     propertyId: '',
@@ -42,11 +61,12 @@ export default function ExtrasPage() {
     boatId: '',
     capacity: '',
     providerName: '',
+    providerRate: 0, // percentual do dono
   });
 
   // Carrega embarcações mockadas
   useEffect(() => {
-    setBoats(mockBoats);
+    setBoats(mockBoats as Boat[]);
   }, []);
 
   // Carrega dados do localStorage
@@ -71,9 +91,10 @@ export default function ExtrasPage() {
     }
   };
 
-  const filteredExtraServices = extraServices.filter(service => {
+  const filteredExtraServices = extraServices.filter((service) => {
     const searchLower = searchTerm.toLowerCase();
-    const propertyName = properties.find(p => p.id === service.propertyId)?.name || '';
+    const propertyName =
+      properties.find((p) => p.id === service.propertyId)?.name || '';
 
     return (
       (service.clientName || '').toLowerCase().includes(searchLower) ||
@@ -83,16 +104,16 @@ export default function ExtrasPage() {
   });
 
   const getPropertyName = (propertyId: string) => {
-    const property = properties.find(p => p.id === propertyId);
+    const property = properties.find((p) => p.id === propertyId);
     return property ? property.name : 'Casa não encontrada';
   };
 
   const getReservationsForProperty = (propertyId: string) => {
-    return reservations.filter(r => r.propertyId === propertyId);
+    return reservations.filter((r) => r.propertyId === propertyId);
   };
 
   const getClientName = (reservationId: string) => {
-    const reservation = reservations.find(r => r.id === reservationId);
+    const reservation = reservations.find((r) => r.id === reservationId);
     return reservation ? reservation.clientName : '';
   };
 
@@ -102,7 +123,9 @@ export default function ExtrasPage() {
       return { min: '', max: '' };
     }
 
-    const reservation = reservations.find(r => r.id === formData.reservationId);
+    const reservation = reservations.find(
+      (r) => r.id === formData.reservationId,
+    );
     if (!reservation) {
       return { min: '', max: '' };
     }
@@ -112,31 +135,35 @@ export default function ExtrasPage() {
       max: reservation.checkOut,
     };
   };
-  
-const getPaymentStatusBadge = (status: string) => {
-  const badges = {
-    paid: 'bg-green-100 text-green-700',
-    pending: 'bg-red-100 text-red-700',
-    partial: 'bg-yellow-100 text-yellow-700',
+
+  const getPaymentStatusBadge = (status: 'paid' | 'pending' | 'partial') => {
+    const badges: Record<'paid' | 'pending' | 'partial', string> = {
+      paid: 'bg-green-100 text-green-700',
+      pending: 'bg-red-100 text-red-700',
+      partial: 'bg-yellow-100 text-yellow-700',
+    };
+
+    const labels: Record<'paid' | 'pending' | 'partial', string> = {
+      paid: 'Pago',
+      pending: 'Pendente',
+      partial: 'Parcial',
+    };
+
+    return (
+      <span
+        className={`px-3 py-1 rounded-full text-xs font-semibold ${badges[status]}`}
+      >
+        {labels[status]}
+      </span>
+    );
   };
 
-  const labels: Record<string, string> = {
-    paid: 'Pago',
-    pending: 'Pendente',
-    partial: 'Parcial',
-  };
-
-  return (
-    <span className={px-3 py-1 rounded-full text-xs font-semibold ${badges[status]}}>
-      {labels[status]}
-    </span>
-  );
-};
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const reservation = reservations.find(r => r.id === formData.reservationId);
+    const reservation = reservations.find(
+      (r) => r.id === formData.reservationId,
+    );
     if (!reservation) {
       alert('Reserva não encontrada!');
       return;
@@ -151,9 +178,12 @@ const getPaymentStatusBadge = (status: string) => {
       return;
     }
 
-    const paymentStatus =
-      formData.paidValue === 0 ? 'pending' :
-      formData.paidValue >= formData.totalValue ? 'paid' : 'partial';
+    const paymentStatus: 'paid' | 'pending' | 'partial' =
+      formData.paidValue === 0
+        ? 'pending'
+        : formData.paidValue >= formData.totalValue
+        ? 'paid'
+        : 'partial';
 
     const newExtraService: ExtraService = {
       id: Date.now().toString(),
@@ -175,7 +205,7 @@ const getPaymentStatusBadge = (status: string) => {
     setExtraServices(updatedServices);
     localStorage.setItem('extraServices', JSON.stringify(updatedServices));
 
-    alert('Extra cadastrado com sucesso!');
+    alert('Passeio cadastrado com sucesso!');
     setShowForm(false);
     setFormData({
       propertyId: '',
@@ -190,11 +220,12 @@ const getPaymentStatusBadge = (status: string) => {
       boatId: '',
       capacity: '',
       providerName: '',
+      providerRate: 0,
     });
   };
 
   const handleExtraClick = (extraService: ExtraService) => {
-    router.push(/admin/extras/${extraService.id}/editar);
+    router.push(`/admin/extras/${extraService.id}/editar`);
   };
 
   const dateLimits = getDateLimits();
@@ -204,22 +235,28 @@ const getPaymentStatusBadge = (status: string) => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Serviços Extras</h1>
-          <p className="text-gray-600">Gerencie todos os serviços adicionais agendados</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Passeios (Lancha / Jet Ski)
+          </h1>
+          <p className="text-gray-600">
+            Gerencie todos os passeios adicionais vinculados às reservas
+          </p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
           className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all font-semibold"
         >
           <Plus className="w-5 h-5" />
-          Novo Serviço Extra
+          Novo Passeio
         </button>
       </div>
 
       {/* Formulário */}
       {showForm && (
         <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Cadastrar Novo Serviço Extra</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">
+            Cadastrar Novo Passeio
+          </h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -250,14 +287,16 @@ const getPaymentStatusBadge = (status: string) => {
                 </select>
               </div>
 
-              {/* Passeio (Lancha / Jet Ski) */}
+              {/* Tipo de Passeio */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
                   Tipo de Passeio *
                 </label>
                 <select
                   value={formData.extraType}
-                  onChange={(e) => setFormData({ ...formData, extraType: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, extraType: e.target.value })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   required
                 >
@@ -276,12 +315,23 @@ const getPaymentStatusBadge = (status: string) => {
                 <select
                   value={formData.boatId || ''}
                   onChange={(e) => {
-                    const selected = boats.find((b) => b.id === e.target.value);
+                    const selected = boats.find(
+                      (b) => b.id === e.target.value,
+                    );
+                    const price = selected?.price || 0;
+                    const rate = selected?.providerRate ?? 60; // padrão 60%
+                    const providerValue = (price * rate) / 100;
+
                     setFormData({
                       ...formData,
                       boatId: e.target.value,
-                      capacity: selected?.capacity?.toString() || '',
-                      totalValue: selected?.price || 0,
+                      capacity: selected?.capacity
+                        ? String(selected.capacity)
+                        : '',
+                      totalValue: price,
+                      providerTotalValue: providerValue,
+                      providerName: selected?.providerName || '',
+                      providerRate: rate,
                     });
                   }}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
@@ -290,7 +340,8 @@ const getPaymentStatusBadge = (status: string) => {
                   <option value="">Selecionar...</option>
                   {boats.map((boat) => (
                     <option key={boat.id} value={boat.id}>
-                      {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
+                      {boat.name} — {boat.capacity} pessoas — R${' '}
+                      {boat.price.toFixed(2)}
                     </option>
                   ))}
                 </select>
@@ -305,7 +356,9 @@ const getPaymentStatusBadge = (status: string) => {
                   type="number"
                   placeholder="Ex: 10 pessoas"
                   value={formData.capacity || ''}
-                  onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, capacity: e.target.value })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   required
                 />
@@ -320,7 +373,9 @@ const getPaymentStatusBadge = (status: string) => {
                   type="text"
                   placeholder="Nome do dono"
                   value={formData.providerName || ''}
-                  onChange={(e) => setFormData({ ...formData, providerName: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, providerName: e.target.value })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg"
                   required
                 />
@@ -334,7 +389,6 @@ const getPaymentStatusBadge = (status: string) => {
                 <select
                   value={formData.reservationId}
                   onChange={(e) => {
-                    const reservation = reservations.find((r) => r.id === e.target.value);
                     setFormData({
                       ...formData,
                       reservationId: e.target.value,
@@ -346,33 +400,20 @@ const getPaymentStatusBadge = (status: string) => {
                   disabled={!formData.propertyId}
                 >
                   <option value="">Selecione uma reserva</option>
-                  {getReservationsForProperty(formData.propertyId).map((reservation) => (
-                    <option key={reservation.id} value={reservation.id}>
-                      {reservation.clientName} -{' '}
-                      {new Date(reservation.checkIn).toLocaleDateString('pt-BR')} a{' '}
-                      {new Date(reservation.checkOut).toLocaleDateString('pt-BR')}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Tipo de Extra */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Tipo de Extra *
-                </label>
-                <select
-                  value={formData.extraType}
-                  onChange={(e) => setFormData({ ...formData, extraType: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
-                >
-                  <option value="">Selecione o tipo</option>
-                  {mockExtras.map((extra) => (
-                    <option key={extra.id} value={extra.name}>
-                      {extra.name}
-                    </option>
-                  ))}
+                  {getReservationsForProperty(formData.propertyId).map(
+                    (reservation) => (
+                      <option key={reservation.id} value={reservation.id}>
+                        {reservation.clientName} -{' '}
+                        {new Date(
+                          reservation.checkIn,
+                        ).toLocaleDateString('pt-BR')}{' '}
+                        a{' '}
+                        {new Date(
+                          reservation.checkOut,
+                        ).toLocaleDateString('pt-BR')}
+                      </option>
+                    ),
+                  )}
                 </select>
               </div>
 
@@ -384,7 +425,9 @@ const getPaymentStatusBadge = (status: string) => {
                 <input
                   type="date"
                   value={formData.serviceDate}
-                  onChange={(e) => setFormData({ ...formData, serviceDate: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, serviceDate: e.target.value })
+                  }
                   min={dateLimits.min}
                   max={dateLimits.max}
                   disabled={!formData.reservationId}
@@ -393,7 +436,8 @@ const getPaymentStatusBadge = (status: string) => {
                 />
                 {formData.reservationId && (
                   <p className="text-xs text-gray-600 mt-1">
-                    Período disponível: {new Date(dateLimits.min).toLocaleDateString('pt-BR')} a{' '}
+                    Período disponível:{' '}
+                    {new Date(dateLimits.min).toLocaleDateString('pt-BR')} a{' '}
                     {new Date(dateLimits.max).toLocaleDateString('pt-BR')}
                   </p>
                 )}
@@ -407,7 +451,9 @@ const getPaymentStatusBadge = (status: string) => {
                 <input
                   type="time"
                   value={formData.serviceTime}
-                  onChange={(e) => setFormData({ ...formData, serviceTime: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, serviceTime: e.target.value })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
@@ -471,6 +517,12 @@ const getPaymentStatusBadge = (status: string) => {
                   min="0"
                   step="0.01"
                 />
+                {formData.providerRate > 0 && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Repasse padrão: {formData.providerRate}% do valor do
+                    passeio.
+                  </p>
+                )}
               </div>
 
               {/* Repasse Pago ao Prestador */}
@@ -495,12 +547,12 @@ const getPaymentStatusBadge = (status: string) => {
             </div>
 
             {/* Botões */}
-            <div className="flex gap-4">
+            <div className="flex gap-4 mt-4">
               <button
                 type="submit"
                 className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-semibold"
               >
-                Cadastrar Serviço
+                Cadastrar Passeio
               </button>
 
               <button
@@ -521,7 +573,7 @@ const getPaymentStatusBadge = (status: string) => {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
-            placeholder="Buscar por cliente, tipo de extra ou casa..."
+            placeholder="Buscar por cliente, tipo de passeio ou casa..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -529,7 +581,7 @@ const getPaymentStatusBadge = (status: string) => {
         </div>
       </div>
 
-      {/* Extras Services Grid */}
+      {/* Lista de passeios */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {filteredExtraServices.map((service) => (
           <div
@@ -544,11 +596,15 @@ const getPaymentStatusBadge = (status: string) => {
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">{service.extraType}</h3>
-                  <p className="text-sm text-gray-600">{getPropertyName(service.propertyId)}</p>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    {service.extraType}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {getPropertyName(service.propertyId)}
+                  </p>
                 </div>
               </div>
-              {getPaymentStatusBadge(service.paymentStatus)}
+              {getPaymentStatusBadge(service.paymentStatus as any)}
             </div>
 
             {/* Info Grid */}
@@ -557,7 +613,9 @@ const getPaymentStatusBadge = (status: string) => {
                 <User className="w-4 h-4 text-gray-400" />
                 <div>
                   <p className="text-xs text-gray-600">Cliente</p>
-                  <p className="text-sm font-semibold text-gray-900">{service.clientName}</p>
+                  <p className="text-sm font-semibold text-gray-900">
+                    {service.clientName}
+                  </p>
                 </div>
               </div>
 
@@ -576,7 +634,9 @@ const getPaymentStatusBadge = (status: string) => {
                   <Clock className="w-4 h-4 text-gray-400" />
                   <div>
                     <p className="text-xs text-gray-600">Horário</p>
-                    <p className="text-sm font-semibold text-gray-900">{service.serviceTime}</p>
+                    <p className="text-sm font-semibold text-gray-900">
+                      {service.serviceTime}
+                    </p>
                   </div>
                 </div>
               )}
@@ -586,20 +646,27 @@ const getPaymentStatusBadge = (status: string) => {
             <div className="border-t border-gray-200 pt-4 space-y-3">
               {/* Valores do Cliente */}
               <div>
-                <p className="text-xs font-semibold text-gray-600 mb-2">💰 Valores do Cliente</p>
+                <p className="text-xs font-semibold text-gray-600 mb-2">
+                  💰 Valores do Cliente
+                </p>
                 <div className="grid grid-cols-3 gap-2 text-sm">
                   <div>
                     <p className="text-xs text-gray-600">Total</p>
-                    <p className="font-bold text-gray-900">R$ {service.totalValue.toFixed(2)}</p>
+                    <p className="font-bold text-gray-900">
+                      R$ {service.totalValue.toFixed(2)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Pago</p>
-                    <p className="font-bold text-green-600">R$ {service.paidValue.toFixed(2)}</p>
+                    <p className="font-bold text-green-600">
+                      R$ {service.paidValue.toFixed(2)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Pendente</p>
                     <p className="font-bold text-red-600">
-                      R$ {(service.totalValue - service.paidValue).toFixed(2)}
+                      R${' '}
+                      {(service.totalValue - service.paidValue).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -607,11 +674,15 @@ const getPaymentStatusBadge = (status: string) => {
 
               {/* Repasse do Prestador */}
               <div>
-                <p className="text-xs font-semibold text-gray-600 mb-2">🤝 Repasse do Prestador</p>
+                <p className="text-xs font-semibold text-gray-600 mb-2">
+                  🤝 Repasse do Prestador
+                </p>
                 <div className="grid grid-cols-3 gap-2 text-sm">
                   <div>
                     <p className="text-xs text-gray-600">Total</p>
-                    <p className="font-bold text-gray-900">R$ {service.providerTotalValue.toFixed(2)}</p>
+                    <p className="font-bold text-gray-900">
+                      R$ {service.providerTotalValue.toFixed(2)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Pago</p>
@@ -622,7 +693,11 @@ const getPaymentStatusBadge = (status: string) => {
                   <div>
                     <p className="text-xs text-gray-600">Pendente</p>
                     <p className="font-bold text-red-600">
-                      R$ {(service.providerTotalValue - service.providerPaidValue).toFixed(2)}
+                      R${' '}
+                      {(
+                        service.providerTotalValue -
+                        service.providerPaidValue
+                      ).toFixed(2)}
                     </p>
                   </div>
                 </div>
@@ -636,9 +711,11 @@ const getPaymentStatusBadge = (status: string) => {
         <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
           <Sparkles className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-            Nenhum serviço extra encontrado
+            Nenhum passeio cadastrado
           </h3>
-          <p className="text-gray-600">Cadastre um novo serviço extra para começar.</p>
+          <p className="text-gray-600">
+            Cadastre um novo passeio para começar.
+          </p>
         </div>
       )}
     </div>
