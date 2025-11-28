@@ -476,10 +476,10 @@ useEffect(() => {
         Cancelar
     </button>
 </div> 
-    {/* FIM BOTÕES */}
-</form> 
-  {/* FIM FORMULÁRIO */}
-  
+              {/* FIM BOTÕES */}
+            </form>
+            {/* FIM FORMULÁRIO */}
+            
 {/* Search */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
         <div className="relative">
