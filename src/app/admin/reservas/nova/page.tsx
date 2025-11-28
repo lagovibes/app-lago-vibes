@@ -571,164 +571,314 @@ setTimeout(() => {
           </div>
         </div>
 
-        {/* EXTRAS LANCHA/JET – LIMPO E FINALIZADO */}
-<div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 border-2 border-purple-200">
-
-  <div className="flex items-center justify-between mb-6">
-    <h2 className="text-xl font-bold text-purple-900">✨ Passeios (Lancha / Jet)</h2>
-    <button type="button" onClick={addExtra} className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all font-medium">
-      <Plus className="w-5 h-5" /> Adicionar Passeio
-    </button>
-  </div>
-
-  {extras.length === 0 ? (
-    <div className="bg-white rounded-xl p-8 text-center">
-      <p className="text-gray-600">Nenhum passeio adicionado</p>
-      <p className="text-sm text-gray-500 mt-2">Clique acima para incluir Lancha/Jet</p>
-    </div>
-  ) : (
-    <div className="space-y-6">
-      {extras.map((extra,index)=>{
-
-        const boats = JSON.parse(localStorage.getItem("boats") || "[]");
-        const remainingClient  = extra.totalValue - extra.paidValue;
-        const remainingOwner   = extra.providerTotalValue - extra.providerPaidValue;
-        const lucroEmpresa     = extra.totalValue - extra.providerTotalValue;
-
-        return(
-        <div key={extra.id} className="bg-white rounded-xl p-6 shadow-md">
-
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-lg text-gray-900">Passeio #{index+1}</h3>
-            <button onClick={()=>removeExtra(index)} className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100"><Trash2 className="w-5 h-5"/></button>
+       {/* EXTRAS (LANCHA/JET) — NOVO SISTEMA */}
+        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 border-2 border-purple-200">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-purple-900">✨ Passeios (Lancha / Jet)</h2>
+            <button
+              type="button"
+              onClick={addExtra}
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
+            >
+              <Plus className="w-5 h-5" />
+              Adicionar Passeio
+            </button>
           </div>
 
-          {/* DADOS PRINCIPAIS */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-
-            <div>
-              <label className="font-semibold text-sm">Tipo *</label>
-              <select value={extra.extraType} onChange={e=>updateExtra(index,"extraType",e.target.value)} className="w-full px-4 py-3 border rounded-lg">
-                <option value="">Selecione</option><option value="lancha">Lancha</option><option value="jet">Jet Ski</option>
-              </select>
+          {extras.length === 0 ? (
+            <div className="bg-white rounded-xl p-8 text-center">
+              <p className="text-gray-600">Nenhum passeio adicionado</p>
+              <p className="text-sm text-gray-500 mt-2">
+                Clique acima para incluir Lancha/Jet Ski
+              </p>
             </div>
+          ) : (
+            <div className="space-y-6">
+              {extras.map((extra, index) => {
+                const boats = JSON.parse(localStorage.getItem("boats") || "[]");
 
-            <div>
-              <label className="font-semibold text-sm">Embarcação *</label>
-              <select className="w-full px-4 py-3 border rounded-lg"
-                value={extra.boatId||""}
-                onChange={(e)=>{
-                  const b = boats.find(x=>x.id===e.target.value);
-                  updateExtra(index,"boatId",e.target.value);
-                  updateExtra(index,"providerName",b?.owner||"");
-                  updateExtra(index,"capacity",b?.capacity||"");
-                  updateExtra(index,"totalValue",b?.price||0);
-                  updateExtra(index,"providerTotalValue",(b?.price||0)*0.50);
-                }}>
-                <option value="">Selecione…</option>
-                {boats.map(b=>(
-                  <option key={b.id} value={b.id}>{b.name} • {b.capacity}p • R${b.price}</option>
-                ))}
-              </select>
+                const clientRemaining = Math.max(0, extra.totalValue - extra.paidValue);
+                const providerRemaining = Math.max(
+                  0,
+                  extra.providerTotalValue - extra.providerPaidValue
+                );
+                const companyValue = Math.max(
+                  0,
+                  extra.totalValue - extra.providerTotalValue
+                );
+
+                return (
+                  <div key={extra.id} className="bg-white rounded-xl p-6 shadow-md">
+                    {/* HEADER */}
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-bold text-gray-900">
+                        Passeio #{index + 1}
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => removeExtra(index)}
+                        className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    {/* CAMPOS DO PASSEIO */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                      {/* Tipo */}
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Tipo do Passeio *
+                        </label>
+                        <select
+                          value={extra.extraType}
+                          onChange={(e) =>
+                            updateExtra(index, "extraType", e.target.value)
+                          }
+                          className="w-full px-4 py-3 border rounded-lg"
+                        >
+                          <option value="">Selecione</option>
+                          <option value="lancha">Lancha</option>
+                          <option value="jet">Jet Ski</option>
+                        </select>
+                      </div>
+
+                      {/* Embarcação */}
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Embarcação *
+                        </label>
+                        <select
+                          value={extra.boatId || ""}
+                          onChange={(e) => {
+                            const boat = boats.find(
+                              (b: any) => b.id === e.target.value
+                            );
+                            updateExtra(index, "boatId", e.target.value);
+                            updateExtra(
+                              index,
+                              "capacity",
+                              boat?.capacity || ""
+                            );
+                            updateExtra(
+                              index,
+                              "providerName",
+                              boat?.owner || ""
+                            );
+                            updateExtra(index, "totalValue", boat?.price || 0);
+                            updateExtra(
+                              index,
+                              "providerTotalValue",
+                              (boat?.price || 0) * 0.5
+                            );
+                          }}
+                          className="w-full px-4 py-3 border rounded-lg"
+                        >
+                          <option value="">Selecione...</option>
+                          {boats.map((b: any) => (
+                            <option key={b.id} value={b.id}>
+                              {b.name} • {b.capacity}p • R$ {b.price}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Proprietário */}
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Proprietário
+                        </label>
+                        <input
+                          type="text"
+                          value={extra.providerName || ""}
+                          className="w-full px-4 py-3 border rounded-lg bg-gray-100"
+                          disabled
+                        />
+                      </div>
+
+                      {/* Capacidade */}
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Capacidade
+                        </label>
+                        <input
+                          type="number"
+                          value={extra.capacity || ""}
+                          onChange={(e) =>
+                            updateExtra(index, "capacity", e.target.value)
+                          }
+                          className="w-full px-4 py-3 border rounded-lg"
+                        />
+                      </div>
+                    </div>
+
+                    {/* DATA / HORÁRIOS */}
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                          Data do Serviço *
+                        </label>
+                        <input
+                          type="date"
+                          value={extra.serviceDate}
+                          onChange={(e) =>
+                            updateExtra(index, "serviceDate", e.target.value)
+                          }
+                          className="w-full px-4 py-3 border rounded-lg"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Horário de Início *
+                          </label>
+                          <input
+                            type="time"
+                            value={extra.startTime}
+                            onChange={(e) =>
+                              updateExtra(index, "startTime", e.target.value)
+                            }
+                            className="w-full px-4 py-3 border rounded-lg"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Horário de Término *
+                          </label>
+                          <input
+                            type="time"
+                            value={extra.endTime}
+                            onChange={(e) =>
+                              updateExtra(index, "endTime", e.target.value)
+                            }
+                            className="w-full px-4 py-3 border rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* CLIENTE */}
+                    <div className="bg-blue-50 rounded-lg p-4 mb-4">
+                      <p className="text-sm font-bold text-blue-900 mb-3">
+                        💰 Valores do Cliente
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-700 mb-2">
+                            Valor Total *
+                          </label>
+                          <input
+                            type="text"
+                            value={applyCurrencyMask(
+                              (extra.totalValue * 100).toString()
+                            )}
+                            onChange={(e) =>
+                              updateExtra(
+                                index,
+                                "totalValue",
+                                extractCurrencyValue(e.target.value)
+                              )
+                            }
+                            className="w-full px-3 py-2 border rounded-lg"
+                            placeholder="R$ 0,00"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-700 mb-2">
+                            Já Pago
+                          </label>
+                          <input
+                            type="text"
+                            value={applyCurrencyMask(
+                              (extra.paidValue * 100).toString()
+                            )}
+                            onChange={(e) =>
+                              updateExtra(
+                                index,
+                                "paidValue",
+                                extractCurrencyValue(e.target.value)
+                              )
+                            }
+                            className="w-full px-3 py-2 border rounded-lg"
+                            placeholder="R$ 0,00"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-700 mb-2">
+                            Falta Pagar
+                          </label>
+                          <div className="px-3 py-2 bg-white border rounded-lg font-bold text-red-600">
+                            {formatCurrency(clientRemaining)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* PROPRIETÁRIO */}
+                    <div className="bg-green-50 rounded-lg p-4 mb-4">
+                      <p className="text-sm font-bold text-green-900 mb-3">
+                        🤝 Repasse ao Proprietário/Parceiro
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-700 mb-2">
+                            Total do Repasse *
+                          </label>
+                          <input
+                            type="text"
+                            value={applyCurrencyMask(
+                              (extra.providerTotalValue * 100).toString()
+                            )}
+                            onChange={(e) =>
+                              updateExtra(
+                                index,
+                                "providerTotalValue",
+                                extractCurrencyValue(e.target.value)
+                              )
+                            }
+                            className="w-full px-3 py-2 border rounded-lg"
+                            placeholder="R$ 0,00"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-700 mb-2">
+                            Já Repassado
+                          </label>
+                          <input
+                            type="text"
+                            value={applyCurrencyMask(
+                              (extra.providerPaidValue * 100).toString()
+                            )}
+                            onChange={(e) =>
+                              updateExtra(
+                                index,
+                                "providerPaidValue",
+                                extractCurrencyValue(e.target.value)
+                              )
+                            }
+                            className="w-full px-3 py-2 border rounded-lg"
+                            placeholder="R$ 0,00"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-semibold text-gray-700 mb-2">
+                            Falta Repassar
+                          </label>
+                          <div className="px-3 py-2 bg-white border rounded-lg font-bold text-orange-600">
+                            {formatCurrency(providerRemaining)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* LUCRO */}
+                    <div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
+                      💰 Lucro Lago Vibes: {formatCurrency(companyValue)}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-
-            <div>
-              <label className="font-semibold text-sm">Proprietário</label>
-              <input disabled className="w-full px-4 py-3 border bg-gray-100 rounded-lg" value={extra.providerName||""}/>
-            </div>
-
-            <div>
-              <label className="font-semibold text-sm">Capacidade</label>
-              <input type="number" className="w-full px-4 py-3 border rounded-lg" value={extra.capacity||""}
-              onChange={(e)=>updateExtra(index,"capacity",e.target.value)}/>
-            </div>
-
-          </div>
-
-          {/* DATA E HORÁRIOS */}
-          <div className="grid grid-cols-3 gap-4 mb-4">
-
-            <div>
-              <label className="font-semibold text-sm">Data *</label>
-              <input type="date" value={extra.serviceDate} onChange={e=>updateExtra(index,"serviceDate",e.target.value)}
-              className="w-full px-4 py-3 border rounded-lg"/>
-            </div>
-
-            <div>
-              <label className="font-semibold text-sm">Início *</label>
-              <input type="time" value={extra.startTime} onChange={e=>updateExtra(index,"startTime",e.target.value)}
-              className="w-full px-4 py-3 border rounded-lg"/>
-            </div>
-
-            <div>
-              <label className="font-semibold text-sm">Término *</label>
-              <input type="time" value={extra.endTime} onChange={e=>updateExtra(index,"endTime",e.target.value)}
-              className="w-full px-4 py-3 border rounded-lg"/>
-            </div>
-
-          </div>
-
-          {/* FINANCEIRO CLIENTE */}
-          <div className="bg-blue-50 p-4 rounded-lg mb-4">
-            <p className="font-bold text-blue-900">💰 Cliente</p>
-            <div className="grid grid-cols-3 gap-4 mt-2 text-sm">
-              
-              <div>
-                <p>Total</p>
-                <input value={applyCurrencyMask((extra.totalValue*100).toString())}
-                className="border p-1 rounded w-full"
-                onChange={e=>updateExtra(index,"totalValue",extractCurrencyValue(e.target.value))}/>
-              </div>
-
-              <div>
-                <p>Pago</p>
-                <input value={applyCurrencyMask((extra.paidValue*100).toString())}
-                className="border p-1 rounded w-full"
-                onChange={e=>updateExtra(index,"paidValue",extractCurrencyValue(e.target.value))}/>
-              </div>
-
-              <div>
-                <p>Pendente</p>
-                <p className="font-bold text-red-600">{formatCurrency(remainingClient)}</p>
-              </div>
-
-            </div>
-          </div>
-
-          {/* REPASSE PROPRIETÁRIO */}
-          <div className="bg-green-50 p-4 rounded-lg">
-            <p className="font-bold text-green-900">🤝 Proprietário</p>
-            <div className="grid grid-cols-3 gap-4 mt-2 text-sm">
-
-              <div>
-                <p>Total</p>
-                <input value={applyCurrencyMask((extra.providerTotalValue*100).toString())}
-                className="border p-1 rounded w-full"
-                onChange={e=>updateExtra(index,"providerTotalValue",extractCurrencyValue(e.target.value))}/>
-              </div>
-
-              <div>
-                <p>Pago</p>
-                <input value={applyCurrencyMask((extra.providerPaidValue*100).toString())}
-                className="border p-1 rounded w-full"
-                onChange={e=>updateExtra(index,"providerPaidValue",extractCurrencyValue(e.target.value))}/>
-              </div>
-
-              <div>
-                <p>Pendente</p>
-                <p className="font-bold text-orange-600">{formatCurrency(remainingOwner)}</p>
-              </div>
-
-            </div>
-          </div>
-
-         {/* 💰 Lucro Lago Vibes */}
-<div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
-  💼 Lucro Lago Vibes: {formatCurrency(lucroEmpresa)}
-</div>
-
-</div>   {/* 🔹 Fecha card branco interno do passeio */}
-
-))}      {/* 🔹 Fecha o map(extras) */}
-
-</div>   {/* 🔹 Fecha container principal dos extras */}
+          )}
+        </div>
