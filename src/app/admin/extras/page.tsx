@@ -277,12 +277,13 @@ useEffect(() => {
     required
   >
     <option value="">Selecionar...</option>
-
-{boats.map((boat) => (
-  <option key={boat.id} value={boat.id}>
-    {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
-  </option>
-))}
+    {boats.map((boat) => (
+      <option key={boat.id} value={boat.id}>
+        {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
+      </option>
+    ))}
+  </select>
+</div>
     
 {/* Capacidade */}
 <div>
