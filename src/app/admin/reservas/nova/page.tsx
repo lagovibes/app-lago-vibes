@@ -722,14 +722,13 @@ setTimeout(() => {
             </div>
           </div>
 
-          {/* LUCRO */}
+         {/* 💰 Lucro Lago Vibes */}
 <div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
   💼 Lucro Lago Vibes: {formatCurrency(lucroEmpresa)}
 </div>
 
-</div>   {/* Fecha card branco do extra */}
-))}       {/* Fecha o .map(extras) */}
+</div>   {/* 🔹 Fecha card branco interno do passeio */}
 
-</div>    {/* Fecha container principal das embarcações */}
+))}      {/* 🔹 Fecha o map(extras) */}
 
-{/* ===== Pagamento / Proprietário / Restante do Form já continua depois daqui ===== */}
+</div>   {/* 🔹 Fecha container principal dos extras */}
