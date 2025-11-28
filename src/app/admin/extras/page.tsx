@@ -126,11 +126,11 @@ export default function ExtrasPage() {
     partial: "Parcial",
   };
 
-  return (
-    <span className={px-3 py-1 rounded-full text-xs font-semibold ${badges[status]}}>
-      {labels[status]}
-    </span>
-  );
+ return (
+  <span className={px-3 py-1 rounded-full text-xs font-semibold ${badges[status]}}>
+    {labels[status]}
+  </span>
+);
 };
   
   const handleSubmit = (e: React.FormEvent) => {
