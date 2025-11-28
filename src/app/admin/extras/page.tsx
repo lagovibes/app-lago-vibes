@@ -113,24 +113,26 @@ export default function ExtrasPage() {
     };
   };
 
-  const getPaymentStatusBadge = (status: string) => {
-    const badges = {
-      paid: 'bg-green-100 text-green-700',
-      pending: 'bg-red-100 text-red-700',
-      partial: 'bg-yellow-100 text-yellow-700',
-    };
-    const labels = {
-      paid: 'Pago',
-      pending: 'Pendente',
-      partial: 'Parcial',
-    };
-    return (
-      <span className={px-3 py-1 rounded-full text-xs font-semibold ${badges[status as keyof typeof badges]}}>
-        {labels[status as keyof typeof labels]}
-      </span>
-    );
+ const getPaymentStatusBadge = (status: string) => {
+  const badges: Record<string, string> = {
+    paid: "bg-green-100 text-green-700",
+    pending: "bg-red-100 text-red-700",
+    partial: "bg-yellow-100 text-yellow-700",
   };
 
+  const labels: Record<string, string> = {
+    paid: "Pago",
+    pending: "Pendente",
+    partial: "Parcial",
+  };
+
+  return (
+    <span className={px-3 py-1 rounded-full text-xs font-semibold ${badges[status]}}>
+      {labels[status]}
+    </span>
+  );
+};
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
