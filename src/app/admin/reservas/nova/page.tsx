@@ -900,8 +900,6 @@ setTimeout(() => {
 
 </div> {/* Actions */}
 </form>
-
 </div> {/* FIM DO MAP EXTRA */}
 ))}
-
 </div> {/* CONTAINER PRINCIPAL DAS EMBARCAÇÕES */}
