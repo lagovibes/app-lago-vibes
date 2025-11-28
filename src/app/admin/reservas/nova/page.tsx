@@ -611,29 +611,151 @@ setTimeout(() => {
                       </button>
                     </div>
 
-                    {/* Campos do Extra */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-                      {/* Tipo de Serviço */}
-                      <div className="md:col-span-2 lg:col-span-1">
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                          1️⃣ Tipo de Serviço *
-                        </label>
-                        <select
-                          value={extra.extraType}
-                          onChange={(e) => updateExtra(index, 'extraType', e.target.value)}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          required
-                        >
-                          <option value="">Selecione o serviço</option>
-                          <option value="Lancha">Lancha</option>
-                          <option value="Jet Ski">Jet Ski</option>
-                          <option value="Churrasqueira Premium">Churrasqueira Premium</option>
-                          <option value="Chef Particular">Chef Particular</option>
-                          <option value="Decoração">Decoração</option>
-                          <option value="Transfer">Transfer</option>
-                          <option value="Outro">Outro</option>
-                        </select>
-                      </div>
+                    {/* EXTRAS (LANCHA/JET) — NOVO SISTEMA */}
+<div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 border-2 border-purple-200">
+
+  <div className="flex items-center justify-between mb-6">
+    <h2 className="text-xl font-bold text-purple-900">✨ Passeios (Lancha / Jet)</h2>
+    <button
+      type="button"
+      onClick={addExtra}
+      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
+    >
+      <Plus className="w-5 h-5" />
+      Adicionar Passeio
+    </button>
+  </div>
+
+  {extras.length === 0 ? (
+    <div className="bg-white rounded-xl p-8 text-center">
+      <p className="text-gray-600">Nenhum passeio adicionado</p>
+      <p className="text-sm text-gray-500 mt-2">Clique acima para incluir Lancha/Jet Ski</p>
+    </div>
+  ) : (
+    <div className="space-y-6">
+
+      {extras.map((extra, index) => {
+
+        /** 1) Carregar embarcações já cadastradas no painel */
+        const boats = JSON.parse(localStorage.getItem("boats") || "[]");
+
+        /** 2) Se uma embarcação já foi selecionada, buscar os dados dela */
+        const selectedBoat = boats.find((b:any) => b.id === extra.boatId);
+
+        /** 3) Valores automáticos */
+        const clientRemaining  = Math.max(0, extra.totalValue - extra.paidValue);
+        const providerRemaining = Math.max(0, extra.providerTotalValue - extra.providerPaidValue);
+        const companyValue = Math.max(0, extra.totalValue - extra.providerTotalValue);
+
+        return (
+          <div key={extra.id} className="bg-white rounded-xl p-6 shadow-md">
+
+            {/* HEADER */}
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-gray-900">Passeio #{index + 1}</h3>
+
+              <button
+                type="button"
+                onClick={() => removeExtra(index)}
+                className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* CAMPOS DO PASSEIO */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+
+              {/* ➤ Tipo */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Tipo do Passeio *
+                </label>
+                <select
+                  value={extra.extraType}
+                  onChange={(e) => updateExtra(index, 'extraType', e.target.value)}
+                  className="w-full px-4 py-3 border rounded-lg"
+                >
+                  <option value="">Selecione</option>
+                  <option value="lancha">Lancha</option>
+                  <option value="jet">Jet Ski</option>
+                </select>
+              </div>
+
+              {/* ➤ Escolher embarcação (automático via localStorage) */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Embarcação *</label>
+                <select
+                  value={extra.boatId || ""}
+                  onChange={(e) => {
+                    const boat = boats.find((b:any)=> b.id === e.target.value);
+                    updateExtra(index,'boatId',e.target.value);
+                    updateExtra(index,'capacity',boat?.capacity || "");
+                    updateExtra(index,'providerName',boat?.owner || "");
+                    updateExtra(index,'totalValue',boat?.price || 0);
+                    updateExtra(index,'providerTotalValue', (boat?.price * 0.50) || 0); // 50% repasse automático (pode ajustar depois)
+                  }}
+                  className="w-full px-4 py-3 border rounded-lg"
+                >
+                  <option value="">Selecione...</option>
+                  {boats.map((b:any)=>(
+                    <option key={b.id} value={b.id}>
+                      {b.name} • {b.capacity}p • R$ {b.price}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* ➤ Proprietário */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Proprietário</label>
+                <input
+                  type="text"
+                  value={extra.providerName || ""}
+                  className="w-full px-4 py-3 border rounded-lg bg-gray-100"
+                  disabled
+                />
+              </div>
+
+              {/* ➤ Capacidade */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Capacidade</label>
+                <input
+                  type="number"
+                  className="w-full px-4 py-3 border rounded-lg"
+                  value={extra.capacity || ""}
+                  onChange={(e)=> updateExtra(index,'capacity',e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* VALORES FINANCEIROS AUTOMÁTICOS */}
+            <div className="border-t pt-4 space-y-3">
+
+              <p className="font-bold text-gray-900 text-sm">💰 Cliente</p>
+              <div className="grid grid-cols-3 gap-2 text-sm">
+                <div><p>Total</p><p className="font-bold">R$ {extra.totalValue.toFixed(2)}</p></div>
+                <div><p>Pago</p><p className="font-bold text-green-600">R$ {extra.paidValue.toFixed(2)}</p></div>
+                <div><p>Pendente</p><p className="font-bold text-red-600">R$ {clientRemaining.toFixed(2)}</p></div>
+              </div>
+
+              <p className="font-bold text-gray-900 text-sm pt-3">🤝 Repasse ao Proprietário</p>
+              <div className="grid grid-cols-3 gap-2 text-sm">
+                <div><p>Total</p><p className="font-bold">R$ {extra.providerTotalValue.toFixed(2)}</p></div>
+                <div><p>Pago</p><p className="font-bold text-green-600">R$ {extra.providerPaidValue.toFixed(2)}</p></div>
+                <div><p>Pendente</p><p className="font-bold text-orange-600">R$ {providerRemaining.toFixed(2)}</p></div>
+              </div>
+
+              <div className="pt-3 font-bold text-purple-800 text-md">
+                🏢 Lucro da Lago Vibes: R$ {companyValue.toFixed(2)}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  )}
+</div>
 
                       {/* Data do Serviço */}
                       <div>
