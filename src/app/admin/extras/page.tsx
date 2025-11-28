@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, Search, Calendar, Clock, DollarSign, User, Home, Sparkles } from 'lucide-react';
 import { ExtraService } from '@/lib/types';
-import { mockExtras } from '@/lib/mock-data';
-import { mockBoats } from '@/lib/mock-data'; // Embarcações cadastradas
+import { mockExtras, mockBoats } from '@/lib/mock-data'; // Embarcações cadastradas
 import { useRouter } from 'next/navigation';
 
 interface Property {
@@ -28,9 +27,8 @@ export default function ExtrasPage() {
   const [extraServices, setExtraServices] = useState<ExtraService[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [reservations, setReservations] = useState<Reservation[]>([]);
-  
-  // EMBARCAÇÕES (Lanchas / Jets)
-const [boats, setBoats] = useState<any[]>([]);
+  const [boats, setBoats] = useState<any[]>([]);
+
   const [formData, setFormData] = useState({
     propertyId: '',
     reservationId: '',
@@ -41,30 +39,32 @@ const [boats, setBoats] = useState<any[]>([]);
     paidValue: 0,
     providerTotalValue: 0,
     providerPaidValue: 0,
+    boatId: '',
+    capacity: '',
+    providerName: '',
   });
 
-  // CARREGA EMBARCAÇÕES AUTOMATICAMENTE
-useEffect(() => {
-    setBoats(mockBoats); // vem do cadastro de embarcações
-}, []);
+  // Carrega embarcações mockadas
+  useEffect(() => {
+    setBoats(mockBoats);
+  }, []);
+
+  // Carrega dados do localStorage
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = () => {
-    // Carregar casas
     const storedProperties = localStorage.getItem('properties');
     if (storedProperties) {
       setProperties(JSON.parse(storedProperties));
     }
 
-    // Carregar reservas
     const storedReservations = localStorage.getItem('reservations');
     if (storedReservations) {
       setReservations(JSON.parse(storedReservations));
     }
 
-    // Carregar serviços extras
     const storedExtraServices = localStorage.getItem('extraServices');
     if (storedExtraServices) {
       setExtraServices(JSON.parse(storedExtraServices));
@@ -74,7 +74,7 @@ useEffect(() => {
   const filteredExtraServices = extraServices.filter(service => {
     const searchLower = searchTerm.toLowerCase();
     const propertyName = properties.find(p => p.id === service.propertyId)?.name || '';
-    
+
     return (
       (service.clientName || '').toLowerCase().includes(searchLower) ||
       (service.extraType || '').toLowerCase().includes(searchLower) ||
@@ -96,7 +96,7 @@ useEffect(() => {
     return reservation ? reservation.clientName : '';
   };
 
-  // Obter os limites de data baseado na reserva selecionada
+  // Limites de data pela reserva
   const getDateLimits = () => {
     if (!formData.reservationId) {
       return { min: '', max: '' };
@@ -125,7 +125,7 @@ useEffect(() => {
       partial: 'Parcial',
     };
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${badges[status as keyof typeof badges]}`}>
+      <span className={px-3 py-1 rounded-full text-xs font-semibold ${badges[status as keyof typeof badges]}}>
         {labels[status as keyof typeof labels]}
       </span>
     );
@@ -140,7 +140,6 @@ useEffect(() => {
       return;
     }
 
-    // Validar se a data está dentro do período da reserva
     const serviceDate = new Date(formData.serviceDate);
     const checkIn = new Date(reservation.checkIn);
     const checkOut = new Date(reservation.checkOut);
@@ -150,7 +149,7 @@ useEffect(() => {
       return;
     }
 
-    const paymentStatus = 
+    const paymentStatus =
       formData.paidValue === 0 ? 'pending' :
       formData.paidValue >= formData.totalValue ? 'paid' : 'partial';
 
@@ -186,12 +185,14 @@ useEffect(() => {
       paidValue: 0,
       providerTotalValue: 0,
       providerPaidValue: 0,
+      boatId: '',
+      capacity: '',
+      providerName: '',
     });
   };
 
   const handleExtraClick = (extraService: ExtraService) => {
-    // Navegar para tela de edição do extra
-    router.push(`/admin/extras/${extraService.id}/editar`);
+    router.push(/admin/extras/${extraService.id}/editar);
   };
 
   const dateLimits = getDateLimits();
@@ -213,11 +214,11 @@ useEffect(() => {
         </button>
       </div>
 
-      {/* Form */}
+      {/* Formulário */}
       {showForm && (
         <div className="bg-white rounded-2xl shadow-lg p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-6">Cadastrar Novo Serviço Extra</h2>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Casa */}
@@ -227,93 +228,102 @@ useEffect(() => {
                 </label>
                 <select
                   value={formData.propertyId}
-                  onChange={(e) => setFormData({ ...formData, propertyId: e.target.value, reservationId: '', serviceDate: '' })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      propertyId: e.target.value,
+                      reservationId: '',
+                      serviceDate: '',
+                    })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                 >
                   <option value="">Selecione uma casa</option>
-                  {properties.map(property => (
+                  {properties.map((property) => (
                     <option key={property.id} value={property.id}>
                       {property.name}
                     </option>
                   ))}
                 </select>
               </div>
-{/* Passeio (Lancha / Jet Ski) */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-2">
-    Tipo de Passeio *
-  </label>
-  <select
-    value={formData.extraType}
-    onChange={(e) => setFormData({ ...formData, extraType: e.target.value })}
-    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-    required
-  >
-    <option value="">Selecione</option>
-    <option value="Lancha">Lancha</option>
-    <option value="Jet Ski">Jet Ski</option>
-  </select>
-</div>
 
-{/* Selecionar Embarcação */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-2">
-    Escolha a Embarcação *
-  </label>
+              {/* Passeio (Lancha / Jet Ski) */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Tipo de Passeio *
+                </label>
+                <select
+                  value={formData.extraType}
+                  onChange={(e) => setFormData({ ...formData, extraType: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Selecione</option>
+                  <option value="Lancha">Lancha</option>
+                  <option value="Jet Ski">Jet Ski</option>
+                </select>
+              </div>
 
-  <select
-    value={formData.boatId || ""}
-    onChange={(e) => {
-      const selected = boats.find(b => b.id === e.target.value);
-      setFormData({
-        ...formData,
-        boatId: e.target.value,
-        capacity: selected?.capacity || "",
-        totalValue: selected?.price || 0
-      });
-    }}
-    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-    required
-  >
-    <option value="">Selecionar...</option>
-    {boats.map((boat) => (
-      <option key={boat.id} value={boat.id}>
-        {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
-      </option>
-    ))}
-  </select>
-</div>
-    
-{/* Capacidade */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-2">
-    Capacidade de Pessoas *
-  </label>
-  <input
-    type="number"
-    placeholder="Ex: 10 pessoas"
-    value={formData.capacity || ""}
-    onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-    required
-  />
-</div>
+              {/* Selecionar Embarcação */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Escolha a Embarcação *
+                </label>
 
-{/* Nome do Proprietário */}
-<div>
-  <label className="block text-sm font-semibold text-gray-700 mb-2">
-    Proprietário da Embarcação *
-  </label>
-  <input
-    type="text"
-    placeholder="Nome do dono"
-    value={formData.providerName || ""}
-    onChange={(e) => setFormData({ ...formData, providerName: e.target.value })}
-    className="w-full px-4 py-3 border border-gray-300 rounded-lg"
-    required
-  />
-</div>
+                <select
+                  value={formData.boatId || ''}
+                  onChange={(e) => {
+                    const selected = boats.find((b) => b.id === e.target.value);
+                    setFormData({
+                      ...formData,
+                      boatId: e.target.value,
+                      capacity: selected?.capacity?.toString() || '',
+                      totalValue: selected?.price || 0,
+                    });
+                  }}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Selecionar...</option>
+                  {boats.map((boat) => (
+                    <option key={boat.id} value={boat.id}>
+                      {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Capacidade */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Capacidade de Pessoas *
+                </label>
+                <input
+                  type="number"
+                  placeholder="Ex: 10 pessoas"
+                  value={formData.capacity || ''}
+                  onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+
+              {/* Nome do Proprietário */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Proprietário da Embarcação *
+                </label>
+                <input
+                  type="text"
+                  placeholder="Nome do dono"
+                  value={formData.providerName || ''}
+                  onChange={(e) => setFormData({ ...formData, providerName: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg"
+                  required
+                />
+              </div>
+
               {/* Reserva */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -322,11 +332,11 @@ useEffect(() => {
                 <select
                   value={formData.reservationId}
                   onChange={(e) => {
-                    const reservation = reservations.find(r => r.id === e.target.value);
-                    setFormData({ 
-                      ...formData, 
+                    const reservation = reservations.find((r) => r.id === e.target.value);
+                    setFormData({
+                      ...formData,
                       reservationId: e.target.value,
-                      serviceDate: '', // Limpar data ao trocar reserva
+                      serviceDate: '',
                     });
                   }}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -334,9 +344,11 @@ useEffect(() => {
                   disabled={!formData.propertyId}
                 >
                   <option value="">Selecione uma reserva</option>
-                  {getReservationsForProperty(formData.propertyId).map(reservation => (
+                  {getReservationsForProperty(formData.propertyId).map((reservation) => (
                     <option key={reservation.id} value={reservation.id}>
-                      {reservation.clientName} - {new Date(reservation.checkIn).toLocaleDateString('pt-BR')} a {new Date(reservation.checkOut).toLocaleDateString('pt-BR')}
+                      {reservation.clientName} -{' '}
+                      {new Date(reservation.checkIn).toLocaleDateString('pt-BR')} a{' '}
+                      {new Date(reservation.checkOut).toLocaleDateString('pt-BR')}
                     </option>
                   ))}
                 </select>
@@ -354,7 +366,7 @@ useEffect(() => {
                   required
                 >
                   <option value="">Selecione o tipo</option>
-                  {mockExtras.map(extra => (
+                  {mockExtras.map((extra) => (
                     <option key={extra.id} value={extra.name}>
                       {extra.name}
                     </option>
@@ -379,7 +391,8 @@ useEffect(() => {
                 />
                 {formData.reservationId && (
                   <p className="text-xs text-gray-600 mt-1">
-                    Período disponível: {new Date(dateLimits.min).toLocaleDateString('pt-BR')} a {new Date(dateLimits.max).toLocaleDateString('pt-BR')}
+                    Período disponível: {new Date(dateLimits.min).toLocaleDateString('pt-BR')} a{' '}
+                    {new Date(dateLimits.max).toLocaleDateString('pt-BR')}
                   </p>
                 )}
               </div>
@@ -405,7 +418,12 @@ useEffect(() => {
                 <input
                   type="number"
                   value={formData.totalValue}
-                  onChange={(e) => setFormData({ ...formData, totalValue: parseFloat(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      totalValue: parseFloat(e.target.value) || 0,
+                    })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
                   min="0"
@@ -421,7 +439,12 @@ useEffect(() => {
                 <input
                   type="number"
                   value={formData.paidValue}
-                  onChange={(e) => setFormData({ ...formData, paidValue: parseFloat(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      paidValue: parseFloat(e.target.value) || 0,
+                    })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   min="0"
                   step="0.01"
@@ -436,7 +459,12 @@ useEffect(() => {
                 <input
                   type="number"
                   value={formData.providerTotalValue}
-                  onChange={(e) => setFormData({ ...formData, providerTotalValue: parseFloat(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      providerTotalValue: parseFloat(e.target.value) || 0,
+                    })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   min="0"
                   step="0.01"
@@ -451,36 +479,41 @@ useEffect(() => {
                 <input
                   type="number"
                   value={formData.providerPaidValue}
-                  onChange={(e) => setFormData({ ...formData, providerPaidValue: parseFloat(e.target.value) || 0 })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      providerPaidValue: parseFloat(e.target.value) || 0,
+                    })
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   min="0"
                   step="0.01"
                 />
               </div>
+            </div>
 
-         {/* Botões */}
-<div className="flex gap-4">
+            {/* Botões */}
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-semibold"
+              >
+                Cadastrar Serviço
+              </button>
 
-    {/* Botão cadastrar */}
-    <button
-        type="submit"
-        className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-semibold">
-        Cadastrar Serviço
-    </button>
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
-    {/* Botão cancelar */}
-    <button
-        type="button"
-        onClick={() => setShowForm(false)}
-        className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200">
-        Cancelar
-    </button>
-</div> 
-              {/* FIM BOTÕES */}
-            </form>
-            {/* FIM FORMULÁRIO */}
-            
-{/* Search */}
+      {/* Search */}
       <div className="bg-white rounded-2xl shadow-lg p-6">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -563,7 +596,9 @@ useEffect(() => {
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Pendente</p>
-                    <p className="font-bold text-red-600">R$ {(service.totalValue - service.paidValue).toFixed(2)}</p>
+                    <p className="font-bold text-red-600">
+                      R$ {(service.totalValue - service.paidValue).toFixed(2)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -578,11 +613,15 @@ useEffect(() => {
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Pago</p>
-                    <p className="font-bold text-green-600">R$ {service.providerPaidValue.toFixed(2)}</p>
+                    <p className="font-bold text-green-600">
+                      R$ {service.providerPaidValue.toFixed(2)}
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-600">Pendente</p>
-                    <p className="font-bold text-red-600">R$ {(service.providerTotalValue - service.providerPaidValue).toFixed(2)}</p>
+                    <p className="font-bold text-red-600">
+                      R$ {(service.providerTotalValue - service.providerPaidValue).toFixed(2)}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -594,7 +633,9 @@ useEffect(() => {
       {filteredExtraServices.length === 0 && (
         <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
           <Sparkles className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Nenhum serviço extra encontrado</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            Nenhum serviço extra encontrado
+          </h3>
           <p className="text-gray-600">Cadastre um novo serviço extra para começar.</p>
         </div>
       )}
