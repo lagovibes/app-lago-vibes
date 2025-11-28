@@ -869,9 +869,10 @@ setTimeout(() => {
     🔥 Lucro Lago Vibes: {formatCurrency(companyValue)}
   </div>
 </div>
-
-</div>     {/* fim do card branco do passeio */}
-))}        {/* fim do extras.map */}
-</div>     {/* fim do container space-y-6 */}
-) : null } {/* fim do ternário */}
-</div>     {/* fim do container principal dos passeios */}
+                    
+</div> {/* fim do card branco do passeio */}
+              ); {/* fim do return do map */}
+            })} {/* fim do extras.map */}
+          </div> {/* fim do container space-y-6 */}
+        )} {/* fim do ternário extras.length > 0 */}
+      </div> {/* fim do container principal dos passeios */}
