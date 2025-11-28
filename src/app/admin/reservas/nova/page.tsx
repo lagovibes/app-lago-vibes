@@ -816,68 +816,62 @@ setTimeout(() => {
                     </div>
 
                     {/* PROPRIETÁRIO */}
-                    <div className="bg-green-50 rounded-lg p-4 mb-4">
-                      <p className="text-sm font-bold text-green-900 mb-3">
-                        🤝 Repasse ao Proprietário/Parceiro
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-700 mb-2">
-                            Total do Repasse *
-                          </label>
-                          <input
-                            type="text"
-                            value={applyCurrencyMask(
-                              (extra.providerTotalValue * 100).toString()
-                            )}
-                            onChange={(e) =>
-                              updateExtra(
-                                index,
-                                "providerTotalValue",
-                                extractCurrencyValue(e.target.value)
-                              )
-                            }
-                            className="w-full px-3 py-2 border rounded-lg"
-                            placeholder="R$ 0,00"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-700 mb-2">
-                            Já Repassado
-                          </label>
-                          <input
-                            type="text"
-                            value={applyCurrencyMask(
-                              (extra.providerPaidValue * 100).toString()
-                            )}
-                            onChange={(e) =>
-                              updateExtra(
-                                index,
-                                "providerPaidValue",
-                                extractCurrencyValue(e.target.value)
-                              )
-                            }
-                            className="w-full px-3 py-2 border rounded-lg"
-                            placeholder="R$ 0,00"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-xs font-semibold text-gray-700 mb-2">
-                            Falta Repassar
-                          </label>
-                          <div className="px-3 py-2 bg-white border rounded-lg font-bold text-orange-600">
-                            {formatCurrency(providerRemaining)}
-                          </div>
-                        </div>
-                      </div>
-                  
-            {/* LUCRO */}
-            <div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
-              🔥 Lucro Lago Vibes: {formatCurrency(companyValue)}
-            </div>
-          </div> {/* fim do card branco do passeio */}
-        );      {/* fim do return do map */}
-      })}       {/* fim do extras.map */}
-    </div>      {/* fim do container space-y-6 */}
-  )}            {/* fim do ternário extras.length === 0 */}
-</div>          {/* fim do container principal dos passeios */}
+<div className="bg-green-50 rounded-lg p-4 mb-4">
+  <p className="text-sm font-bold text-green-900 mb-3">
+    🤝 Repasse ao Proprietário/Parceiro
+  </p>
+
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+    <div>
+      <label className="block text-xs font-semibold text-gray-700 mb-2">
+        Total do Repasse *
+      </label>
+      <input
+        type="text"
+        value={applyCurrencyMask((extra.providerTotalValue * 100).toString())}
+        onChange={(e) =>
+          updateExtra(index, "providerTotalValue", extractCurrencyValue(e.target.value))
+        }
+        className="w-full px-3 py-2 border rounded-lg"
+        placeholder="R$ 0,00"
+      />
+    </div>
+
+    <div>
+      <label className="block text-xs font-semibold text-gray-700 mb-2">
+        Já Repassado
+      </label>
+      <input
+        type="text"
+        value={applyCurrencyMask((extra.providerPaidValue * 100).toString())}
+        onChange={(e) =>
+          updateExtra(index, "providerPaidValue", extractCurrencyValue(e.target.value))
+        }
+        className="w-full px-3 py-2 border rounded-lg"
+        placeholder="R$ 0,00"
+      />
+    </div>
+
+    <div>
+      <label className="block text-xs font-semibold text-gray-700 mb-2">
+        Falta Repassar
+      </label>
+      <div className="px-3 py-2 bg-white border rounded-lg font-bold text-orange-600">
+        {formatCurrency(providerRemaining)}
+      </div>
+    </div>
+
+  </div>
+
+  {/* LUCRO */}
+  <div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
+    🔥 Lucro Lago Vibes: {formatCurrency(companyValue)}
+  </div>
+</div>
+
+</div>     {/* fim do card branco do passeio */}
+))}        {/* fim do extras.map */}
+</div>     {/* fim do container space-y-6 */}
+) : null } {/* fim do ternário */}
+</div>     {/* fim do container principal dos passeios */}
