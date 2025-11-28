@@ -571,56 +571,12 @@ setTimeout(() => {
           </div>
         </div>
 
-        {/* Extras - NOVO SISTEMA COMPLETO */}
-        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 border-2 border-purple-200">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-purple-900">✨ Extras / Serviços</h2>
-            <button
-              type="button"
-              onClick={addExtra}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
-            >
-              <Plus className="w-5 h-5" />
-              Adicionar Extra
-            </button>
-          </div>
-          
-          {extras.length === 0 ? (
-            <div className="bg-white rounded-xl p-8 text-center">
-              <p className="text-gray-600">Nenhum extra adicionado</p>
-              <p className="text-sm text-gray-500 mt-2">Clique em "Adicionar Extra" para incluir serviços como Lancha, Jet Ski, etc.</p>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {extras.map((extra, index) => {
-                const clientRemaining = Math.max(0, extra.totalValue - extra.paidValue);
-                const providerRemaining = Math.max(0, extra.providerTotalValue - extra.providerPaidValue);
-                const companyValue = Math.max(0, extra.totalValue - extra.providerTotalValue);
-
-                return (
-                  <div key={extra.id} className="bg-white rounded-xl p-6 shadow-md">
-                    {/* Header do Extra */}
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-bold text-gray-900">Extra #{index + 1}</h3>
-                      <button
-                        type="button"
-                        onClick={() => removeExtra(index)}
-                        className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    </div>
-
-                 {/* EXTRAS (LANCHA/JET) */}
+        {/* EXTRAS LANCHA/JET – LIMPO E FINALIZADO */}
 <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 border-2 border-purple-200">
 
   <div className="flex items-center justify-between mb-6">
     <h2 className="text-xl font-bold text-purple-900">✨ Passeios (Lancha / Jet)</h2>
-    <button
-      type="button"
-      onClick={addExtra}
-      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all font-medium"
-    >
+    <button type="button" onClick={addExtra} className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all font-medium">
       <Plus className="w-5 h-5" /> Adicionar Passeio
     </button>
   </div>
@@ -628,278 +584,152 @@ setTimeout(() => {
   {extras.length === 0 ? (
     <div className="bg-white rounded-xl p-8 text-center">
       <p className="text-gray-600">Nenhum passeio adicionado</p>
-      <p className="text-sm text-gray-500 mt-2">Clique acima para incluir Lancha/Jet Ski</p>
+      <p className="text-sm text-gray-500 mt-2">Clique acima para incluir Lancha/Jet</p>
     </div>
   ) : (
     <div className="space-y-6">
-      {extras.map((extra, index) => {
+      {extras.map((extra,index)=>{
 
         const boats = JSON.parse(localStorage.getItem("boats") || "[]");
-        const selectedBoat = boats.find((b:any) => b.id === extra.boatId);
+        const remainingClient  = extra.totalValue - extra.paidValue;
+        const remainingOwner   = extra.providerTotalValue - extra.providerPaidValue;
+        const lucroEmpresa     = extra.totalValue - extra.providerTotalValue;
 
-        const clientRemaining  = Math.max(0, extra.totalValue - extra.paidValue);
-        const providerRemaining = Math.max(0, extra.providerTotalValue - extra.providerPaidValue);
-        const companyValue = Math.max(0, extra.totalValue - extra.providerTotalValue);
+        return(
+        <div key={extra.id} className="bg-white rounded-xl p-6 shadow-md">
 
-        return (
-          <div key={extra.id} className="bg-white rounded-xl p-6 shadow-md">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-lg text-gray-900">Passeio #{index+1}</h3>
+            <button onClick={()=>removeExtra(index)} className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100"><Trash2 className="w-5 h-5"/></button>
+          </div>
 
-            {/* HEADER */}
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-gray-900">Passeio #{index + 1}</h3>
-              <button onClick={() => removeExtra(index)} className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">
-                <Trash2 className="w-5 h-5" />
-              </button>
+          {/* DADOS PRINCIPAIS */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+
+            <div>
+              <label className="font-semibold text-sm">Tipo *</label>
+              <select value={extra.extraType} onChange={e=>updateExtra(index,"extraType",e.target.value)} className="w-full px-4 py-3 border rounded-lg">
+                <option value="">Selecione</option><option value="lancha">Lancha</option><option value="jet">Jet Ski</option>
+              </select>
             </div>
 
-            {/* CAMPOS PRINCIPAIS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo *</label>
-                <select value={extra.extraType} onChange={(e)=>updateExtra(index,"extraType",e.target.value)} className="w-full px-4 py-3 border rounded-lg">
-                  <option value="">Selecione</option>
-                  <option value="lancha">Lancha</option>
-                  <option value="jet">Jet Ski</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Embarcação *</label>
-                <select
-                  value={extra.boatId || ""}
-                  onChange={(e)=>{
-                    const b=boats.find((x:any)=>x.id===e.target.value);
-                    updateExtra(index,"boatId",e.target.value);
-                    updateExtra(index,"providerName",b?.owner||"");
-                    updateExtra(index,"capacity",b?.capacity||"");
-                    updateExtra(index,"totalValue",b?.price||0);
-                    updateExtra(index,"providerTotalValue",(b?.price||0)*0.50);
-                  }}
-                  className="w-full px-4 py-3 border rounded-lg"
-                >
-                  <option value="">Selecione...</option>
-                  {boats.map((b:any)=>(
-                    <option key={b.id} value={b.id}>{b.name} • {b.capacity}p • R$ {b.price}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Proprietário</label>
-                <input type="text" disabled className="w-full px-4 py-3 border bg-gray-100 rounded-lg" value={extra.providerName||""}/>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Capacidade</label>
-                <input type="number" className="w-full px-4 py-3 border rounded-lg" value={extra.capacity||""} onChange={(e)=>updateExtra(index,"capacity",e.target.value)}/>
-              </div>
-
+            <div>
+              <label className="font-semibold text-sm">Embarcação *</label>
+              <select className="w-full px-4 py-3 border rounded-lg"
+                value={extra.boatId||""}
+                onChange={(e)=>{
+                  const b = boats.find(x=>x.id===e.target.value);
+                  updateExtra(index,"boatId",e.target.value);
+                  updateExtra(index,"providerName",b?.owner||"");
+                  updateExtra(index,"capacity",b?.capacity||"");
+                  updateExtra(index,"totalValue",b?.price||0);
+                  updateExtra(index,"providerTotalValue",(b?.price||0)*0.50);
+                }}>
+                <option value="">Selecione…</option>
+                {boats.map(b=>(
+                  <option key={b.id} value={b.id}>{b.name} • {b.capacity}p • R${b.price}</option>
+                ))}
+              </select>
             </div>
 
-            {/* DATA + HORÁRIOS */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="text-sm font-semibold text-gray-700 mb-2 block">Data *</label>
-                <input type="date" value={extra.serviceDate} onChange={(e)=>updateExtra(index,"serviceDate",e.target.value)} className="w-full border rounded-lg px-4 py-3"/>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block">Início *</label>
-                  <input type="time" value={extra.startTime} onChange={(e)=>updateExtra(index,"startTime",e.target.value)} className="w-full border rounded-lg px-4 py-3"/>
-                </div>
-
-                <div>
-                  <label className="text-sm font-semibold text-gray-700 mb-2 block">Término *</label>
-                  <input type="time" value={extra.endTime} onChange={(e)=>updateExtra(index,"endTime",e.target.value)} className="w-full border rounded-lg px-4 py-3"/>
-                </div>
-              </div>
+            <div>
+              <label className="font-semibold text-sm">Proprietário</label>
+              <input disabled className="w-full px-4 py-3 border bg-gray-100 rounded-lg" value={extra.providerName||""}/>
             </div>
 
-            {/* VALORES CLIENTE */}
-            <div className="bg-blue-50 p-4 rounded-lg mb-4">
-              <p className="font-bold text-blue-900">💰 Cliente</p>
-              <div className="grid grid-cols-3 gap-4 mt-2 text-sm">
-                <div><p>Total</p><input type="text" value={applyCurrencyMask((extra.totalValue*100).toString())} className="border rounded w-full p-1"
-                  onChange={(e)=>updateExtra(index,"totalValue",extractCurrencyValue(e.target.value))}/></div>
-                <div><p>Pago</p><input type="text" value={applyCurrencyMask((extra.paidValue*100).toString())} className="border rounded w-full p-1"
-                  onChange={(e)=>updateExtra(index,"paidValue",extractCurrencyValue(e.target.value))}/></div>
-                <div><p>Pendente</p><p className="font-bold text-red-600">{formatCurrency(clientRemaining)}</p></div>
-              </div>
-            </div>
-
-            {/* VALORES PROPRIETÁRIO */}
-            <div className="bg-green-50 p-4 rounded-lg mb-4">
-              <p className="font-bold text-green-900">🤝 Proprietário</p>
-              <div className="grid grid-cols-3 gap-4 mt-2 text-sm">
-                <div><p>Total</p><input type="text" value={applyCurrencyMask((extra.providerTotalValue*100).toString())} className="border rounded w-full p-1"
-                  onChange={(e)=>updateExtra(index,"providerTotalValue",extractCurrencyValue(e.target.value))}/></div>
-                <div><p>Pago</p><input type="text" value={applyCurrencyMask((extra.providerPaidValue*100).toString())} className="border rounded w-full p-1"
-                  onChange={(e)=>updateExtra(index,"providerPaidValue",extractCurrencyValue(e.target.value))}/></div>
-                <div><p>Pendente</p><p className="font-bold text-orange-600">{formatCurrency(providerRemaining)}</p></div>
-              </div>
-            </div>
-
-            {/* LUCRO */}
-            <div className="bg-purple-50 p-3 rounded-lg font-bold text-purple-900 text-center">
-              🏢 Lucro Lago Vibes: {formatCurrency(companyValue)}
+            <div>
+              <label className="font-semibold text-sm">Capacidade</label>
+              <input type="number" className="w-full px-4 py-3 border rounded-lg" value={extra.capacity||""}
+              onChange={(e)=>updateExtra(index,"capacity",e.target.value)}/>
             </div>
 
           </div>
+
+          {/* DATA E HORÁRIOS */}
+          <div className="grid grid-cols-3 gap-4 mb-4">
+
+            <div>
+              <label className="font-semibold text-sm">Data *</label>
+              <input type="date" value={extra.serviceDate} onChange={e=>updateExtra(index,"serviceDate",e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg"/>
+            </div>
+
+            <div>
+              <label className="font-semibold text-sm">Início *</label>
+              <input type="time" value={extra.startTime} onChange={e=>updateExtra(index,"startTime",e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg"/>
+            </div>
+
+            <div>
+              <label className="font-semibold text-sm">Término *</label>
+              <input type="time" value={extra.endTime} onChange={e=>updateExtra(index,"endTime",e.target.value)}
+              className="w-full px-4 py-3 border rounded-lg"/>
+            </div>
+
+          </div>
+
+          {/* FINANCEIRO CLIENTE */}
+          <div className="bg-blue-50 p-4 rounded-lg mb-4">
+            <p className="font-bold text-blue-900">💰 Cliente</p>
+            <div className="grid grid-cols-3 gap-4 mt-2 text-sm">
+              
+              <div>
+                <p>Total</p>
+                <input value={applyCurrencyMask((extra.totalValue*100).toString())}
+                className="border p-1 rounded w-full"
+                onChange={e=>updateExtra(index,"totalValue",extractCurrencyValue(e.target.value))}/>
+              </div>
+
+              <div>
+                <p>Pago</p>
+                <input value={applyCurrencyMask((extra.paidValue*100).toString())}
+                className="border p-1 rounded w-full"
+                onChange={e=>updateExtra(index,"paidValue",extractCurrencyValue(e.target.value))}/>
+              </div>
+
+              <div>
+                <p>Pendente</p>
+                <p className="font-bold text-red-600">{formatCurrency(remainingClient)}</p>
+              </div>
+
+            </div>
+          </div>
+
+          {/* REPASSE PROPRIETÁRIO */}
+          <div className="bg-green-50 p-4 rounded-lg">
+            <p className="font-bold text-green-900">🤝 Proprietário</p>
+            <div className="grid grid-cols-3 gap-4 mt-2 text-sm">
+
+              <div>
+                <p>Total</p>
+                <input value={applyCurrencyMask((extra.providerTotalValue*100).toString())}
+                className="border p-1 rounded w-full"
+                onChange={e=>updateExtra(index,"providerTotalValue",extractCurrencyValue(e.target.value))}/>
+              </div>
+
+              <div>
+                <p>Pago</p>
+                <input value={applyCurrencyMask((extra.providerPaidValue*100).toString())}
+                className="border p-1 rounded w-full"
+                onChange={e=>updateExtra(index,"providerPaidValue",extractCurrencyValue(e.target.value))}/>
+              </div>
+
+              <div>
+                <p>Pendente</p>
+                <p className="font-bold text-orange-600">{formatCurrency(remainingOwner)}</p>
+              </div>
+
+            </div>
+          </div>
+
+          {/* LUCRO */}
+          <div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
+            🏢 Lucro Lago Vibes: {formatCurrency(lucroEmpresa)}
+          </div>
+
+        </div>
         )
       })}
     </div>
   )}
 </div>
-
-        {/* Pagamento */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Pagamento</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Status do Pagamento *
-              </label>
-              <select
-                value={formData.paymentStatus}
-                onChange={(e) => setFormData({ ...formData, paymentStatus: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="pending">Pendente</option>
-                <option value="partial">Parcial</option>
-                <option value="paid">Pago</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Valor Total da Reserva *
-              </label>
-              <input
-                type="text"
-                value={displayValues.totalValue}
-                onChange={(e) => {
-                  const numericValue = extractCurrencyValue(e.target.value);
-                  const newOwnerTotalValue = (numericValue * ownerPercentage) / 100;
-                  setFormData({ 
-                    ...formData, 
-                    totalValue: numericValue,
-                    ownerTotalValue: newOwnerTotalValue
-                  });
-                  setDisplayValues({
-                    ...displayValues,
-                    totalValue: e.target.value,
-                    ownerTotalValue: formatCurrency(newOwnerTotalValue)
-                  });
-                }}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Valor Já Pago
-              </label>
-              <input
-                type="text"
-                value={displayValues.paidValue}
-                onChange={(e) => {
-                  const numericValue = extractCurrencyValue(e.target.value);
-                  setFormData({ ...formData, paidValue: numericValue });
-                  setDisplayValues({
-                    ...displayValues,
-                    paidValue: e.target.value
-                  });
-                }}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Valor Restante a Pagar
-              </label>
-              <div className="px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-lg font-bold text-gray-900">
-                {formatCurrency(calculateRemainingValue())}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Financeiro do Proprietário */}
-        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl shadow-lg p-6 border-2 border-purple-200">
-          <h2 className="text-xl font-bold text-purple-900 mb-6">💰 Financeiro do Proprietário</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-semibold text-purple-700 mb-2">
-                Valor Total do Repasse ({ownerPercentage}%)
-              </label>
-              <input
-                type="text"
-                value={displayValues.ownerTotalValue}
-                onChange={(e) => {
-                  const numericValue = extractCurrencyValue(e.target.value);
-                  setFormData({ ...formData, ownerTotalValue: numericValue });
-                  setDisplayValues({
-                    ...displayValues,
-                    ownerTotalValue: e.target.value
-                  });
-                }}
-                className="w-full px-4 py-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-purple-700 mb-2">
-                Valor Já Pago ao Proprietário
-              </label>
-              <input
-                type="text"
-                value={displayValues.ownerPaidValue}
-                onChange={(e) => {
-                  const numericValue = extractCurrencyValue(e.target.value);
-                  setFormData({ ...formData, ownerPaidValue: numericValue });
-                  setDisplayValues({
-                    ...displayValues,
-                    ownerPaidValue: e.target.value
-                  });
-                }}
-                className="w-full px-4 py-3 border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-purple-700 mb-2">
-                Valor Restante a Pagar ao Proprietário
-              </label>
-              <div className="px-4 py-3 bg-white border-2 border-purple-300 rounded-lg text-2xl font-bold text-purple-900">
-                {formatCurrency(calculateOwnerRemainingValue())}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-4">
-          <button
-            type="submit"
-            className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl hover:shadow-lg transition-all font-semibold"
-          >
-            📋 Ver Resumo e Confirmar
-          </button>
-
-<Link
-  href="/admin/reservas"
-  className="px-6 py-4 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition"
->
-  Cancelar
-</Link>
-
-</div> {/* Actions */}
-</form>
-</div> {/* FIM DO MAP EXTRA */}
-))}
-</div> {/* CONTAINER PRINCIPAL DAS EMBARCAÇÕES */}
