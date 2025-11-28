@@ -872,11 +872,11 @@ setTimeout(() => {
                       </div>
                     </div>
 
-                    {/* LUCRO */}
-                    <div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
-                      💰 Lucro Lago Vibes: {formatCurrency(companyValue)}
-                    </div>
-                    
-                  </div> {/* Fecha card do passeio */}
-))}   {/* Fecha o extras.map() */}
+                    {/* 💰 LUCRO */}
+<div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
+  🔥 Lucro Lago Vibes: {formatCurrency(companyValue)}
+</div>
+
+</div> {/* Fecha o card do Passeio */}
+))} {/* Fecha o extras.map() */}
 </div> {/* Fecha container principal dos passeios */}
