@@ -870,13 +870,14 @@ setTimeout(() => {
                           </div>
                         </div>
                       </div>
-                    </div>
-
-                    {/* 💰 LUCRO */}
-<div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
-  🔥 Lucro Lago Vibes: {formatCurrency(companyValue)}
-</div>
-
-</div> {/* Fecha o card do Passeio */}
-))} {/* Fecha o extras.map() */}
-</div> {/* Fecha container principal dos passeios */}
+                  
+            {/* LUCRO */}
+            <div className="bg-purple-50 mt-4 p-3 rounded-lg font-bold text-purple-900 text-center text-lg">
+              🔥 Lucro Lago Vibes: {formatCurrency(companyValue)}
+            </div>
+          </div> {/* fim do card branco do passeio */}
+        );      {/* fim do return do map */}
+      })}       {/* fim do extras.map */}
+    </div>      {/* fim do container space-y-6 */}
+  )}            {/* fim do ternário extras.length === 0 */}
+</div>          {/* fim do container principal dos passeios */}
