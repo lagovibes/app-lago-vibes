@@ -890,14 +890,18 @@ setTimeout(() => {
           >
             📋 Ver Resumo e Confirmar
           </button>
-          <Link
-            href="/admin/reservas"
-            className="px-6 py-4 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-colors font-semibold"
-          >
-            Cancelar
-          </Link>
-        </div>
-      </form>
-    </div>
-  );
-}
+
+<Link
+  href="/admin/reservas"
+  className="px-6 py-4 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition"
+>
+  Cancelar
+</Link>
+
+</div> {/* Actions */}
+</form>
+
+</div> {/* FIM DO MAP EXTRA */}
+))}
+
+</div> {/* CONTAINER PRINCIPAL DAS EMBARCAÇÕES */}
