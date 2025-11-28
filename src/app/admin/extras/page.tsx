@@ -278,30 +278,11 @@ useEffect(() => {
   >
     <option value="">Selecionar...</option>
 
-    <select
-  value={formData.boatId || ""}
-  onChange={(e) => {
-    const selected = boats.find((b) => b.id === e.target.value);
-    setFormData({
-      ...formData,
-      boatId: e.target.value,
-      capacity: selected?.capacity || "",
-      totalValue: selected?.price || 0,
-    });
-  }}
-  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-  required
->
-
-  <option value="">Selecionar...</option>
-
-  {boats.map((boat) => (
-    <option key={boat.id} value={boat.id}>
-      {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
-    </option>
-  ))}
-
-</select>
+{boats.map((boat) => (
+  <option key={boat.id} value={boat.id}>
+    {boat.name} — {boat.capacity} pessoas — R$ {boat.price}
+  </option>
+))}
     
 {/* Capacidade */}
 <div>
