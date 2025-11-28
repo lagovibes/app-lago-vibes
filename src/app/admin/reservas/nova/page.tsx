@@ -783,7 +783,6 @@ setTimeout(() => {
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                       </div>
-                    </div>
 
                     {/* Valores do Cliente */}
                     <div className="bg-blue-50 rounded-lg p-4 mb-4">
